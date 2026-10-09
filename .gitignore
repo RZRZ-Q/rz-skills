@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+/tmp/
+/test-runs/
+/interview-results/
+/.agents/
