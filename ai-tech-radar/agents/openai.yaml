@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 技术与研究追踪"
+  short_description: "追踪团队工程实践与研究脉络，将博客、论文和代码转成有依据的项目与科研建议"
+  default_prompt: "使用 $ai-tech-radar，围绕我的目标方向跟踪相关团队的工程实践与研究工作，并提出可验收的项目准备建议。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 职业发展"
+  short_description: "整合岗位、工程研究与面经，结合个人目标规划 AI 求职、项目实践和职业成长"
+  default_prompt: "使用 $ai-career，结合我的目标和已有经历，整合岗位、技术研究与面试信息，制定下一阶段行动计划。"

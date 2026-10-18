@@ -8,3 +8,10 @@ __pycache__/
 /test-runs/
 /interview-results/
 /.agents/
+
+# AI Career 用户库与本地采集产物，不属于发布源码。
+/data/
+/reports/
+/jobs.sqlite3*
+/.config/
+/.local/

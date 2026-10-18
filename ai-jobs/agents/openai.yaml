@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 岗位与招聘需求"
+  short_description: "搜索并追踪 AI 实习、校招与社招 JD，保存岗位证据并分析招聘需求"
+  default_prompt: "使用 $ai-jobs，按已有目标搜索并核实 AI 岗位，整理原始 JD 条件、采集覆盖和需求变化。"
