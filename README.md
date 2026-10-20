@@ -1,10 +1,12 @@
 # RZ Skills
 
-从 AI 方向探索、学习与项目实践，到岗位选择和面试准备的 Agent Skills。
+一个持续更新的 Agent Skills 集合，收录可复用的任务流程与工具能力。
 
-`ai-career` 是总体入口，按目标组合 `ai-jobs` 的招聘事实、`ai-tech-radar` 的工程与研究资料，以及可选的 `interview-collection` 面经和练习流程。也可以直接调用子技能处理单项任务。
+目前主要提供 **AI Career** 套件，覆盖 AI 方向探索、学习与项目实践、岗位选择和面试准备；后续会陆续加入其他领域的 Skill。
 
-本仓库是 **[RZRZ-Q/rz-skills](https://github.com/RZRZ-Q/rz-skills) 公开源码仓库**。可安装整套 AI 职业能力，也可选择需要的模块单独使用。
+`ai-career` 是该套件的总入口，按目标组合 `ai-jobs` 的招聘事实、`ai-tech-radar` 的工程与研究资料，以及可选的 `interview-collection` 面经和练习流程。也可以直接调用子技能处理单项任务。
+
+本仓库是 **[RZRZ-Q/rz-skills](https://github.com/RZRZ-Q/rz-skills) 公开源码仓库**。AI Career 支持整套安装，也可选择需要的模块单独使用。
 
 **AI Career v0.1.0-beta.3：嵌套套件**。`ai-career/` 是完整安装包，`modules/` 中各子目录也可单独安装。旧 `v0.1.0-beta.1` 标签保留原并列结构；以下安装方式适用于 `v0.1.0-beta.3` 和当前 main。
 
@@ -21,7 +23,7 @@
 
 ## 安装
 
-所有能力归在 `ai-career/` 总包内，选择整套安装或只装需要的模块。各目录自包含；单装岗位或雷达不再要求额外安装另外两个职业 Skill。
+AI Career 套件的能力归在 `ai-career/` 总包内，选择整套安装或只装需要的模块。各目录自包含；单装岗位或雷达不再要求额外安装另外两个职业 Skill。
 
 | 安装范围 | 仓库路径 | 安装后的入口 |
 |---|---|---|
