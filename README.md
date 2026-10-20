@@ -4,41 +4,62 @@
 
 `ai-career` 是总体入口，按目标组合 `ai-jobs` 的招聘事实、`ai-tech-radar` 的工程与研究资料，以及可选的 `interview-collection` 面经和练习流程。也可以直接调用子技能处理单项任务。
 
-**AI Career v0.1 Beta** 分发可复用流程、公共来源清单和本地存储脚本。个人画像、采集正文、历史库、测试材料、账号与认证信息不随包分发。
+本仓库是 **[RZRZ-Q/rz-skills](https://github.com/RZRZ-Q/rz-skills) 公开源码仓库**。可安装整套 AI 职业能力，也可选择需要的模块单独使用。
+
+**AI Career v0.1.0-beta.3：嵌套套件**。`ai-career/` 是完整安装包，`modules/` 中各子目录也可单独安装。旧 `v0.1.0-beta.1` 标签保留原并列结构；以下安装方式适用于 `v0.1.0-beta.3` 和当前 main。
+
+套件分发可复用流程、公共来源清单和本地存储脚本，新增前置能力诊断、项目成果与面试主张对应、跨会话个人进展续接。个人画像、采集正文、历史库、测试材料、账号与认证信息不随包分发。
 
 ## Skill 目录
 
 | Skill | 用来做什么 | 直接这样说 |
 |---|---|---|
-| [ai-career · 职业发展总入口](ai-career/SKILL.md) | 根据目标、能力和资源，整合方向选择、学习、项目与求职准备 | “我会 Python 和基础机器学习，未来 10 周怎么准备 Agent 方向？” |
-| [ai-jobs · 岗位与 JD](ai-jobs/SKILL.md) | 查找实习／校招／社招，核对资格与状态，保留岗位观察历史 | “找 Agent 与评测岗位，比较不同公司的要求。” |
-| [ai-tech-radar · 工程与研究追踪](ai-tech-radar/SKILL.md) | 跟进技术文章、公众号、论文与代码，分析工程方法和研究问题 | “跟进 Seed、混元、千问近期 Agent 研究，区分复现与科研候选。” |
-| [interview-collection · 面经采集与整理](interview-collection/SKILL.md) | 搜索或读取面经，整理原题，追加飞书，生成岗位题库与本地学习页 | “找腾讯大模型算法面经，最多 5 篇，整理进飞书。”／“把已有题库做成按知识点学习的本地刷题页。” |
+| [ai-career · 职业发展总入口](ai-career/SKILL.md) | 根据目标和能力证据安排项目，梳理成果主张，并续接真实进展 | “先看我的代码和运行结果，判断下一步；哪些成果能用于面试？” |
+| [ai-jobs · 岗位与 JD](ai-career/modules/ai-jobs/SKILL.md) | 查找实习／校招／社招，核对资格与状态，保留岗位观察历史 | “找 Agent 与评测岗位，比较不同公司的要求。” |
+| [ai-tech-radar · 工程与研究追踪](ai-career/modules/ai-tech-radar/SKILL.md) | 跟进技术文章、公众号、论文与代码，分析工程方法和研究问题 | “跟进 Seed、混元、千问近期 Agent 研究，区分复现与科研候选。” |
+| [interview-collection · 面经采集与整理](ai-career/modules/interview-collection/SKILL.md) | 搜索或读取面经，整理原题，追加飞书，生成岗位题库与本地学习页 | “找腾讯大模型算法面经，最多 5 篇，整理进飞书。”／“把已有题库做成按知识点学习的本地刷题页。” |
 
 ## 安装
 
-在支持 Agent Skills 的工具里，把仓库链接与所需范围交给 Agent：
+所有能力归在 `ai-career/` 总包内，选择整套安装或只装需要的模块。各目录自包含；单装岗位或雷达不再要求额外安装另外两个职业 Skill。
+
+| 安装范围 | 仓库路径 | 安装后的入口 |
+|---|---|---|
+| 整套职业能力 | `ai-career` | `ai-career/SKILL.md`，按需读取内含三个模块 |
+| 仅岗位／JD | `ai-career/modules/ai-jobs` | `ai-jobs/SKILL.md` |
+| 仅工程实践／研究追踪 | `ai-career/modules/ai-tech-radar` | `ai-tech-radar/SKILL.md` |
+| 仅面经／题库／练习 | `ai-career/modules/interview-collection` | `interview-collection/SKILL.md` |
+
+把下面任一请求交给支持 Agent Skills 的工具：
 
 ```text
-从 https://github.com/RZRZ-Q/rz-skills 的 v0.1.0-beta.1 安装
-ai-career、ai-jobs、ai-tech-radar，放在同一个 Skill 父目录；
-如果我要面经采集和刷题，再安装 interview-collection。
+从 https://github.com/RZRZ-Q/rz-skills 的 v0.1.0-beta.3 安装 ai-career 整个目录。
 ```
 
-**职业套件的三个目录需要一起安装**：它们共享存储助手和来源引用。安装后可以单独调用任何一个，不必每次执行全部流程。`interview-collection` 可以单独安装，也可作为套件的可选面试环节。
+```text
+只从 https://github.com/RZRZ-Q/rz-skills 的 v0.1.0-beta.3 安装
+ai-career/modules/ai-tech-radar，不安装整个套件。
+```
 
-也可以下载 [Releases 发行包](https://github.com/RZRZ-Q/rz-skills/releases)，从解压后的仓库根目录执行。以支持项目级 `.agents/skills/` 的宿主为例，先把目标路径改为自己的项目：
+公开源码可直接下载，无需私库权限。也可从 [Releases](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.3) 下载 ZIP 与 SHA256SUMS。使用官方 skill-installer 时，选择 `--ref v0.1.0-beta.3`；整套选择 `--path ai-career`，单装选择上表中的子路径；默认安装名取路径最后一段。
+
+已有源码副本时，也可以复制整个目标目录，以项目级安装为例：
 
 ```bash
 mkdir -p /path/to/your-project/.agents/skills
-cp -R ai-career ai-jobs ai-tech-radar /path/to/your-project/.agents/skills/
-# 可选面经与刷题能力
-cp -R interview-collection /path/to/your-project/.agents/skills/
+# 整套安装
+cp -R ai-career /path/to/your-project/.agents/skills/
+# 或只装一个模块；两种方式选择其一
+cp -R ai-career/modules/ai-tech-radar /path/to/your-project/.agents/skills/
 ```
 
-安装前检查目标目录：已有同名 Skill 时先核对来源并备份，不直接覆盖其他作者的包。升级本仓库的旧版本时替换完整 Skill 目录，保留目录外的用户数据；不要把新文件叠加到来源不明的旧目录。复制整个目录，包括 `references/`、`scripts/` 和存在的 `agents/`、`assets/`，不要只拿 `SKILL.md`。其他宿主使用其实际配置的 Skill 目录。
+不要只复制 SKILL.md；一并保留 `references/`、`scripts/`、`agents/`、`assets/` 和存在的 `_shared/`。独立模块的 `_shared/` 是构建时从套件原文生成的必要引用，不包含其他 Skill 入口或用户资料。总入口只读取本轮所需模块，不要求每次运行全部流程。
 
-安装后在目标项目开启新会话，确认宿主识别了这些 Skill。安装源码不会自动安装搜索工具、建立登录态或启动定时采集。Skill 本身不绑定模型。
+从旧版并列安装升级时，先核对同名目录的来源并备份，再用整套目录替换旧 `ai-career`，移出原来单装的本套件模块，避免宿主递归发现时注册同名入口。保留其他作者的 Skill；不要覆盖来源不明的同名目录。整套与同名单项不重叠安装。今后升级替换完整源码目录，数据登记表和库留在原位置，无需迁移。
+
+独立安装一个模块时，宿主的安装目录中出现该模块名是正常的；它在本仓库仍属于 `ai-career/modules/`。后续改装整套，沿用同一个数据登记位置即可继续历史。面经的飞书表和学习页进度沿用其原有保存方式，不因为归入套件而搬迁。
+
+安装后在目标项目开启新会话。宿主可以递归发现内含模块；即使只注册总入口，ai-career 也会按包内路径读取相应模块。安装源码不会自动安装搜索工具、建立登录态或启动定时采集。Skill 本身不绑定模型。
 
 ## 推荐模型
 
@@ -61,9 +82,14 @@ cp -R interview-collection /path/to/your-project/.agents/skills/
 用 ai-career 帮我选项目：会 Python、了解基础机器学习、没有完整 LLM 项目，
 10 周、每周 10 小时、普通电脑与有限 API 预算。给出优先级、最小交付与验收标准。
 用 ai-career 根据我的项目结果和面试反馈调整下一阶段计划。
+用 ai-career 先核对我现有代码、运行日志和解释，找出影响当前项目的前置能力缺口。
+用 ai-career 把我的实际改动、版本和结果对应到面试里能说的贡献，列出还缺的证据。
+用 ai-career 继续历史库里的项目，结合这次反馈更新下一步，重复反馈不要重复记完成。
 ```
 
 岗位事实、作者报告的结果、分析判断和待实施建议分开记录。项目建议说明自己要做的改动、代码依据与能力证明；科研候选额外核查近邻、对照和实验预算。学习复现、工程项目和有待验证的科研贡献分开标明，不预测录用率或论文录用概率。
+
+项目诊断只检查影响本轮最小交付的能力，优先复用已有产物；诊断结果用于调整范围、顺序和验收。成果梳理区分个人改动、上游复用和实际核验范围。后续反馈分别记录“执行完成”和“核验通过”，勾选完成或自述完成不自动升级为已证明的能力。普通岗位或论文查询不强制执行诊断、建立个人档案，也不强制关联 JD。
 
 ### 首次使用与数据保存
 
@@ -77,23 +103,27 @@ cp -R interview-collection /path/to/your-project/.agents/skills/
 | 用户资料根目录 | `${XDG_DATA_HOME:-~/.local/share}/ai-career` |
 | 岗位、watchlist、原文与各轮快照 | 根目录下的 `data/` |
 | 用户报告与建议 | 根目录下的 `reports/` |
+| 个人目标、项目与行动索引（按需） | 根目录下的 `data/career/state.json` |
+| 个人计划与逐轮复盘（按需） | 根目录下的 `reports/career/<run-id>.md` |
 
 新会话先定位库，再读取历史和基线。定位顺序为显式 `--root` → `AI_CAREER_DATA_ROOT` → 当前工作目录已有项目库 → 登记表 → 新用户默认目录。切换工作目录仍可复用登记库；已有项目库原位接入，不自动合并多个库。只解释用法且没有库时不创建数据。
 
-岗位按稳定键保存观察历史；技术材料按稳定 ID 去重，同一工作的文章、论文、代码相互关联，保存各轮快照。成功写入并回读后才更新基线。升级 Skill 不覆盖用户库；备份时同时保留数据根目录和登记表。详见[共用存储](ai-career/references/storage.md)、[岗位追踪](ai-jobs/references/tracking.md)、[技术追踪](ai-tech-radar/references/tracking.md)。
+岗位按稳定键保存观察历史；技术材料按稳定 ID 去重，同一工作的文章、论文、代码相互关联，保存各轮快照。成功写入并回读后才更新基线。升级 Skill 不覆盖用户库；备份时同时保留数据根目录和登记表。详见[共用存储](ai-career/references/storage.md)、[岗位追踪](ai-career/modules/ai-jobs/references/tracking.md)、[技术追踪](ai-career/modules/ai-tech-radar/references/tracking.md)。
+
+保存个人计划或续接时，在同一数据根目录按需建立轻量索引，沿稳定目标／项目／行动 ID 读取相关报告和证据。已有库缺少索引时，从明确关联的旧计划接入，保留旧记录；不会按文件修改时间随意选择报告。新版本、纠正结果或新核验只更新受影响部分；同一反馈和证据没有增量时复用原结论，不重复创建报告或记完成。详见[个人进展续接](ai-career/references/progress.md)。
 
 ### 固定来源与后续扩充
 
 | 清单 | 已核实快照与口径 |
 |---|---|
 | [公司内团队清单](ai-career/references/team-inventory.md) | 2026-10-14：83 个主体、197 条分型实体；包含团队、项目、生态等类型，不全是实验室 |
-| [岗位来源](ai-jobs/references/source-list.md)及行业分表 | 2026-10-14：79 家公司、2 家独立研究机构；156 个已确认入口、10 个候选入口 |
-| [技术公众号](ai-tech-radar/references/wechat-sources.md) | 2026-10-16：43 条来源，40 条有官方关联或入口依据（含历史关系）、3 条候选；认证名称与当前可读性另列 |
-| [工程与研究来源](ai-tech-radar/references/source-list.md) | 官方博客、团队目录、代码、arXiv 与 Hugging Face Papers 等入口，逐条保留归属与阅读边界 |
+| [岗位来源](ai-career/modules/ai-jobs/references/source-list.md)及行业分表 | 2026-10-14：79 家公司、2 家独立研究机构；156 个已确认入口、10 个候选入口 |
+| [技术公众号](ai-career/modules/ai-tech-radar/references/wechat-sources.md) | 2026-10-16：43 条来源，40 条有官方关联或入口依据（含历史关系）、3 条候选；认证名称与当前可读性另列 |
+| [工程与研究来源](ai-career/modules/ai-tech-radar/references/source-list.md) | 官方博客、团队目录、代码、arXiv 与 Hugging Face Papers 等入口，逐条保留归属与阅读边界 |
 
 这些是可选择的公共来源，不是已采集正文数量、当前在招统计或默认全量监控。用户启用项单独保存在自己的 watchlist。可以说“把这家公司加入岗位来源”“增加这个 Lab 的论文入口”“暂停这个来源并保留历史”；按清单维护流程核实归属、入口和可读性、去重后更新，证据不足保留候选。新增来源不默认读取全部正文。定期执行由宿主调度，只有明确要求并实际创建成功才会启动。
 
-Beta 的验证范围以[发行说明](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.1)为准。已有真实材料验证不等于所有平台、账号和网络环境都可访问；默认库在当前设备本地，不提供跨设备同步。以下面经流程保留各自的环境与验证说明。
+本版验证范围见[公开发行说明](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.3)。嵌套布局已通过隔离 CLI 的整套使用、岗位与雷达单装初始化、旧库续接，以及面经单装学习包生成与 CSV 往返；学习页另经浏览器验证旧进度恢复和导入导出。岗位与雷达的全部必需引用均在独立包内。已有真实材料验证不等于所有平台、账号和网络环境都可访问；默认库在当前设备本地，不提供跨设备同步。以下面经流程保留各自的环境与验证说明。
 
 ## 采集子流程：找到有依据的面经
 
@@ -110,7 +140,7 @@ Beta 的验证范围以[发行说明](https://github.com/RZRZ-Q/rz-skills/releas
 
 只找面经时，输出链接、匹配依据和少量代表题；要求整理时，继续进入内部整理流程，提取全部有依据的提问。招聘广告、求助帖、教程和准备题单不会当作实际面经。
 
-→ [运行说明](interview-collection/references/find-interviews.md) · [牛客](interview-collection/references/nowcoder.md) · [小红书](interview-collection/references/xiaohongshu.md) · [知乎](interview-collection/references/zhihu.md) · [B站](interview-collection/references/bilibili.md)
+→ [运行说明](ai-career/modules/interview-collection/references/find-interviews.md) · [牛客](ai-career/modules/interview-collection/references/nowcoder.md) · [小红书](ai-career/modules/interview-collection/references/xiaohongshu.md) · [知乎](ai-career/modules/interview-collection/references/zhihu.md) · [B站](ai-career/modules/interview-collection/references/bilibili.md)
 
 ## 整理子流程：保留原题，按岗位复习
 
@@ -126,11 +156,11 @@ Beta 的验证范围以[发行说明](https://github.com/RZRZ-Q/rz-skills/releas
 输出分两层：
 
 - **原始面经与题目**：Markdown 按经历和轮次整理；飞书用两张关联表，一份可辨认经历一条主记录，原题逐条关联。公司和岗位可筛选，原始称呼另存，外号、emoji 和同义岗位结合上下文归一。
-- **岗位题库**：用户选择后，按已确认的岗位类别复用题库，细分岗位保留在“来源岗位”字段和视图中，避免按别名重复建表；Agent算法、应用开发、评测分别保留。题库包含标准问题、主题、变体与追问、来源公司、原题和面经关联，只在派生层合并同义问法，保留原始题目记录。
+- **岗位题库**：用户选择后，按已确认的岗位类别复用题库，细分岗位保留在“来源岗位”字段和视图中，避免按别名重复建表；Agent算法、应用开发、评测分别保留。来源岗位缺失时保留原值或“未知”，复习分类可结合团队职责和完整项目问答上下文判断；仍无法判断的题进入待归类，不阻塞其余题目。题库包含标准问题、主题、变体与追问、来源公司、原题和面经关联，只在派生层合并同义问法，保留原始题目记录。
 
 原题整理或入表完成后，会提示选择继续积累、生成／更新岗位题库，或生成学习包与本地刷题页；已有明确选择时直接执行。普通追加先按来源链接排重，不重复采集已入库帖子。
 
-→ [运行说明](interview-collection/references/organize-interviews.md) · [公司与岗位归一](interview-collection/references/company-role.md) · [飞书两表](interview-collection/references/feishu-base.md) · [岗位题库](interview-collection/references/role-question-bank.md)
+→ [运行说明](ai-career/modules/interview-collection/references/organize-interviews.md) · [公司与岗位归一](ai-career/modules/interview-collection/references/company-role.md) · [飞书两表](ai-career/modules/interview-collection/references/feishu-base.md) · [岗位题库](ai-career/modules/interview-collection/references/role-question-bank.md)
 
 ## 学习与刷题：把现有题目编排成学习包
 
@@ -143,11 +173,11 @@ Beta 的验证范围以[发行说明](https://github.com/RZRZ-Q/rz-skills/releas
 用更新后的题目重新生成学习页，保留原学习包 ID 和题目 ID，让旧笔记能恢复。
 ```
 
-页面支持专题、搜索与难度筛选、收藏、复习状态、作答和笔记；参考默认收起，也可选择“暂不会，查看参考”。缺少答案时可以正常练习，不自动补答案或扩题。题目显示原句、来源位置、链接和核验状态，多条来源分别保留。
+“面经练习簿”页面支持专题、搜索与难度筛选、收藏、复习状态、作答和笔记；参考默认收起，也可选择“直接看参考”。缺少答案时可以正常练习，不自动补答案或扩题。题目显示原句、来源位置、链接和核验状态，多条来源分别保留。
 
 更新时沿用稳定的学习包 ID 和题目 ID，保留旧作答与笔记；新增题从未练开始，移出题库的旧记录仍保留并可导出。题面或参考变化会将已掌握题目改为需复习，仅增加来源不触发降级。进度可导出／导入 JSON；同 ID 导入记录覆盖本题当前进度，未提供的题目保持不变。更换浏览器或移动 HTML 文件可能隔离本地存储，更新前先导出备份。
 
-→ [学习流程、输入字段与更新说明](interview-collection/references/study-pack.md)
+→ [学习流程、输入字段与更新说明](ai-career/modules/interview-collection/references/study-pack.md)
 
 ## 首次使用与环境准备
 
@@ -159,9 +189,9 @@ Beta 的验证范围以[发行说明](https://github.com/RZRZ-Q/rz-skills/releas
 | 读取小红书、知乎或B站字幕 | 已配置的 [OpenCLI](https://github.com/jackwener/OpenCLI) 与 Browser Bridge，以及用户已登录的 Chrome 会话；小红书图片下载另需 Python 3.9+ |
 | 读取或写入飞书 | 已配置的 [lark-cli](https://github.com/larksuite/cli)、`lark-base` 和 `lark-shared` Skill，以及本轮目标的读取或写入权限 |
 
-随包 `scripts/setup_environment.py` 默认运行只读 `check`，按 `local`、`nowcoder`、`browser`、`feishu`、`excel`、`pdf` 选择本轮依赖。明确选择并授权安装后，`install --features ... --runtime ...` 只向指定项目目录补齐缺失的 OpenCLI 或 Python 可选包，复用可用的已有工具，不升级全局环境。Python、Node.js、Chrome／Bridge、飞书交互安装和账号授权按报告中的步骤完成，详见[环境准备](interview-collection/references/environment.md)。本地文件学习不要求平台登录。
+随包 `scripts/setup_environment.py` 默认运行只读 `check`，按 `local`、`nowcoder`、`browser`、`feishu`、`excel`、`pdf` 选择本轮依赖。明确选择并授权安装后，`install --features ... --runtime ...` 只向指定项目目录补齐缺失的 OpenCLI 或 Python 可选包，复用可用的已有工具，不升级全局环境。Python、Node.js、Chrome／Bridge、飞书交互安装和账号授权按报告中的步骤完成，详见[环境准备](ai-career/modules/interview-collection/references/environment.md)。本地文件学习不要求平台登录。
 
-首次使用会先检查本轮所需环境，指导缺失工具的安装、浏览器连接与飞书授权，完成后复检；不会假定安装 Skill 就等于依赖已齐全。随后集中询问缺失的公司／岗位、平台、数量、输出目标等条件，说明各平台当前并行度与验证范围，让用户选择是否调整，并在确认方案后开始。已明确的条件与授权不重复询问，具体见[首次引导](interview-collection/references/onboarding.md)。
+首次使用会先检查本轮所需环境，指导缺失工具的安装、浏览器连接与飞书授权，完成后复检；不会假定安装 Skill 就等于依赖已齐全。随后集中询问缺失的公司／岗位、平台、数量、输出目标等条件，说明各平台当前并行度与验证范围，让用户选择是否调整，并在确认方案后开始。已明确的条件与授权不重复询问，具体见[首次引导](ai-career/modules/interview-collection/references/onboarding.md)。
 
 飞书是可选输出，普通 Markdown 整理不需要飞书工具；已选择飞书时指导补齐依赖，不擅自改成交付 Markdown。外部工具的安装与登录按官方说明完成，本仓库不包含认证信息或浏览器安装包。
 
@@ -169,7 +199,7 @@ Beta 的验证范围以[发行说明](https://github.com/RZRZ-Q/rz-skills/releas
 
 浏览器路线以官方 OpenCLI `1.8.8` 为当前接口基线，不依赖定制 CLI 或 Bridge。执行前核对本轮工具参数和实际读取能力；版本与连接检查不能代替平台访问验证。
 
-B站默认串行，读取简介及可用字幕，按分 P 保留来源与时间戳。特定导航拒绝的临时 trace 兼容方式及单次页面核验见[B站说明](interview-collection/references/bilibili.md)。没有字幕时明确缺口，不默认下载音视频或调用外部转写；可读字幕也不等于已经审看视频画面。
+B站默认串行，读取简介及可用字幕，按分 P 保留来源与时间戳。特定导航拒绝的临时 trace 兼容方式及单次页面核验见[B站说明](ai-career/modules/interview-collection/references/bilibili.md)。没有字幕时明确缺口，不默认下载音视频或调用外部转写；可读字幕也不等于已经审看视频画面。
 
 ## 来源与临时材料
 
@@ -187,31 +217,29 @@ B站默认串行，读取简介及可用字幕，按分 P 保留来源与时间�
 
 全新机器配置、更高并发与长期访问、人工编辑冲突恢复仍待验证。原文审读与必要纠正是交付流程的一部分；生成器测试不替代参考答案的技术核验。
 
-## 仓库结构
+## 仓库结构与维护
 
 ```text
-ai-career/                      # 总入口、共享存储、公司与团队事实表
-ai-jobs/                        # JD 采集与岗位账本
-ai-tech-radar/                  # 工程／研究追踪与材料目录
-interview-collection/
-  SKILL.md                       # 唯一安装入口
-  references/
-    find-interviews.md           # 采集子流程
-    organize-interviews.md       # 整理子流程
-    study-pack.md                # 学习与刷题流程
-    environment.md               # 按功能检查与局部安装
-    ...                          # 平台、飞书和题库说明
-  scripts/
-    setup_environment.py
-    study_pack.py
-    ...
-  assets/
-    study.html                   # 无题目数据的本地页面模板
+ai-career/
+  SKILL.md                       # 职业发展总入口
+  references/                    # 综合建议、共享事实与进展续接
+  scripts/storage.py             # 定位与复用已有历史库
+  modules/
+    ai-jobs/                     # 可独立安装的岗位模块
+    ai-tech-radar/                # 可独立安装的工程／研究模块
+    interview-collection/        # 可独立安装的面经与学习模块
+scripts/build_suite.py            # 维护用构建器，不装进 Skill
 README.md
 LICENSE
 ```
 
-新增 Skill 按相同方式使用独立目录，并在首页目录中添加用途和安装入口。各 Skill 的运行规则维护在自己的 `SKILL.md` 和引用文件中。
+业务规则维护在总入口或对应模块的原文件中，`_shared/` 与子包的 `storage.py`、雷达包的 `job_ledger.py` 为构建副本，不逐份手改。修改维护源后，用以下命令输出到一个新目录，再核对变更并替换安装包：
+
+```bash
+python3 scripts/build_suite.py --output tmp/rebuild/ai-career
+```
+
+构建器沿实际引用补齐独立包所需文档并重定位链接，不引入其他 Skill 入口；数据目录、历史格式和业务流程不因包布局改变。本仓库源码可重新构建同样的包。测试和个人数据不进入源码或发行附件。
 
 ## 许可
 

@@ -142,9 +142,11 @@ def write_registry(path, registry):
 
 
 def initialize_jobs(db):
-    script = Path(__file__).resolve().parents[2] / "ai-jobs/scripts/job_ledger.py"
+    script = Path(__file__).resolve().with_name("job_ledger.py")
     if not script.is_file():
-        raise StorageError(f"初始化岗位库需要同级安装的 ai-jobs：{script}")
+        script = Path(__file__).resolve().parents[1] / "modules/ai-jobs/scripts/job_ledger.py"
+    if not script.is_file():
+        raise StorageError(f"安装包缺少岗位库初始化脚本：{script}")
     spec = importlib.util.spec_from_file_location("ai_career_job_ledger", script)
     ledger = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(ledger)

@@ -1,13 +1,13 @@
 # 共用数据目录、初始化与历史复用
 
-三个技能共用一个数据根目录。根目录包含 `data/` 与 `reports/`，不是仅指 `data/` 子目录。安装包保存指令、公共来源清单与脚本；用户的关注范围、采集证据、历史观察和报告保存在数据根目录。三个技能按相邻目录安装，直接调用 `ai-jobs` 或 `ai-tech-radar` 时也使用本页的存储助手，无需先执行总入口。
+三个技能共用一个数据根目录。根目录包含 `data/` 与 `reports/`，不是仅指 `data/` 子目录。安装包保存指令、公共来源清单与脚本；用户的关注范围、采集证据、历史观察和报告保存在数据根目录。整套安装时使用 `ai-career` 总包；单独安装的岗位与雷达模块随包携带相同存储助手，使用同一登记位置，无需先执行总入口。
 
 ## 每次调用先定位
 
-涉及已有资料的分析、来源维护或采集保存时，先运行同套件 `ai-career/scripts/storage.py`：
+涉及已有资料的分析、来源维护或采集保存时，先运行当前所用技能目录中的 `scripts/storage.py`：
 
 ```bash
-python3 /path/to/ai-career/scripts/storage.py resolve --workspace /absolute/current-workspace
+python3 /path/to/installed-skill/scripts/storage.py resolve --workspace /absolute/current-workspace
 ```
 
 `resolve` 只读，按以下顺序选择数据根目录：
@@ -32,7 +32,7 @@ python3 /path/to/ai-career/scripts/storage.py resolve --workspace /absolute/curr
 任务需要建立或复用持久化资料，且选定目录尚未初始化或登记时，使用同一根目录执行：
 
 ```bash
-python3 /path/to/ai-career/scripts/storage.py init --root /absolute/selected-root
+python3 /path/to/installed-skill/scripts/storage.py init --root /absolute/selected-root
 ```
 
 使用自定义配置路径时，`resolve` 和 `init` 传入同一个 `--config`。初始化只补缺失目录、账本与工作清单，并登记 `default_root`；再次运行不会清空已有记录、覆盖 watchlist 或推进采集基线。已有项目库原位接入，不复制到默认目录，也不重写旧观察及其证据引用。初始化成功后读取返回路径，确认使用的是预期数据根目录。
@@ -51,8 +51,10 @@ python3 /path/to/ai-career/scripts/storage.py init --root /absolute/selected-roo
 │   ├── radar/
 │   │   ├── watchlist.json
 │   │   └── runs/<run-id>/
+│   ├── career/state.json       # 需要保存个人进展时创建
 │   └── evidence/<run-id>/
 └── reports/
+    └── career/<run-id>.md      # 个人计划与逐轮复盘
 ```
 
 ## 新会话如何复用
@@ -63,9 +65,11 @@ python3 /path/to/ai-career/scripts/storage.py init --root /absolute/selected-roo
 
 - `ai-jobs`：读取 `paths.jobs_watchlist` 的范围、偏好和来源，使用 `paths.jobs_db` 查询岗位及历史。`baselines.jobs_observations` 是最近一批输入，不等于整个岗位历史。
 - `ai-tech-radar`：读取 `paths.radar_watchlist`，以 `baselines.radar_catalog` 作为后续目录命令的 `--previous`。目录含之前保留的材料，不表示本轮全部重新读取；按任务需要读取原输入和证据。
-- `ai-career`：读取所需分支的工作清单、基线与运行记录，沿稳定 ID 查证据；`career_handoff` 是已有交接产物，不另建一份材料库。只使用与本轮目标相关的资料，JD 关联仍按需进行。
+- `ai-career`：读取所需分支的工作清单、基线与运行记录，沿稳定 ID 查证据；`career_handoff` 是雷达到总入口的交接产物，不是个人进度索引。保存计划或续接个人进展时，再读 `<root>/data/career/state.json` 及其相关计划／复盘引用，按[进展续接](progress.md)处理。只使用与本轮目标相关的资料，JD 关联仍按需进行。
 
-存储助手负责定位、补缺和登记，不采集、不分析，也不推进基线。历史调用与数据读写分别遵循[岗位追踪](../../ai-jobs/references/tracking.md)和[材料追踪](../../ai-tech-radar/references/tracking.md)。
+个人索引和 `reports/career/` 由 Agent 在已解析的根目录下按需创建，存储助手的返回字段、初始化条件及原有历史路径保持原约定。旧库缺少索引不代表没有历史；采用用户明确关联的旧计划和产物，保留原文，不按修改时间自动选取报告，也不将历史中的示例画像当作当前用户。没有保存个人计划的任务不创建空索引。
+
+存储助手负责定位、补缺和登记，不采集、不分析，也不推进基线。历史调用与数据读写分别遵循[岗位追踪](../modules/ai-jobs/references/tracking.md)和[材料追踪](../modules/ai-tech-radar/references/tracking.md)。
 
 ## 路径与历史保留
 
@@ -73,4 +77,4 @@ python3 /path/to/ai-career/scripts/storage.py init --root /absolute/selected-roo
 
 每轮新建独立运行目录，保留原始 JSONL、必要正文和目录快照。岗位的新观察追加到同一账本；雷达用旧目录合并新观察并生成新快照。成功写入并回读后才更新 watchlist 的基线指针；失败、未复查或只扩充来源不会清空历史，也不冒充新观察。
 
-备份或迁移须同时保留配置所指的整个库及记录引用的文件。旧观察引用 `tmp/` 或库外绝对路径时，继续保留相应证据；仅复制三个技能目录不包含这些个人数据。改变默认根目录只是选择库，不会自动搬迁或合并已有历史。
+备份或迁移须同时保留配置所指的整个库及记录引用的文件。旧观察引用 `tmp/` 或库外绝对路径时，继续保留相应证据；仅复制技能包不包含这些个人数据。改变默认根目录只是选择库，不会自动搬迁或合并已有历史。

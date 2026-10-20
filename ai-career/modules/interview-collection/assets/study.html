@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f7f2">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; object-src 'none'">
+<title>面经练习簿</title>
+<style>
+:root{--ink:#262723;--muted:#6d6e66;--line:#dcdcd4;--green:#915034;--bg:#f7f7f2;--paper:#fffefa;--serif:Georgia,"Songti SC","Noto Serif CJK SC",serif;--mono:"SFMono-Regular",Consolas,monospace;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-size:14px;line-height:1.65}button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer;transition:background .15s,color .15s,border-color .15s}button:disabled{cursor:not-allowed;opacity:.4}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--green);outline-offset:4px}[hidden]{display:none!important}a{color:var(--green);text-underline-offset:3px}input::placeholder,textarea::placeholder{color:#7b7b72}.icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;vertical-align:middle}.sprite{width:0;height:0;position:absolute;overflow:hidden}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sidebar{position:fixed;inset:0 auto 0 0;width:232px;overflow-y:auto;background:#efefe8;border-right:1px solid var(--line);padding:30px 22px 22px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:12px;margin:0 0 42px}.brand-mark{display:grid;place-items:center;width:32px;height:39px;color:var(--green);border:1px solid currentColor}.brand-mark .icon{width:21px;height:21px}.brand strong{display:block;font-size:20px;font-weight:600;letter-spacing:1px}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:2px;margin-top:2px}.nav-label{font-size:11px;letter-spacing:1px;color:var(--muted);margin:0 10px 12px}.topic-list{display:grid;gap:4px}.topic-button{display:flex;gap:10px;width:100%;padding:15px 10px;border:0;border-left:2px solid transparent;background:transparent;text-align:left;min-height:52px}.topic-button:hover{background:#e7e7de}.topic-button[aria-current=true]{background:#e5e5db;border-left-color:var(--green)}.topic-number{color:var(--muted);font:11px/1.6 var(--mono);padding-top:3px}.topic-copy{flex:1;min-width:0}.topic-title{font-size:12px;line-height:1.7;font-weight:500;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;overflow-wrap:anywhere}.topic-button[aria-current=true] .topic-title{font-weight:600}.topic-count{color:var(--muted);font:10px/2 var(--mono);white-space:nowrap;flex-shrink:0}.topic-sub{font-size:11px;display:block;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.topic-sub:empty{display:none}.topic-progress{display:none}.side-all{display:flex;gap:8px;align-items:center;border:0;border-top:1px solid var(--line);background:none;padding:20px 10px;text-align:left;font-size:12px;margin-top:18px;min-height:44px}.side-all .count{margin-left:auto;font:12px var(--mono);color:var(--muted)}.side-bottom{margin-top:auto;padding-top:32px}.transfer{display:flex;gap:7px}.transfer button{flex:1;border:1px solid #c9c9be;background:transparent;padding:10px 2px;font-size:11px;min-height:42px}.transfer button:hover{background:var(--paper)}.transfer .icon{width:14px;height:14px;margin-right:3px}.save-status{font-size:11px;color:var(--muted);margin:14px 0 3px;line-height:1.8}.save-status::before{content:"";display:inline-block;background:#6c795e;width:5px;height:5px;border-radius:50%;margin:0 6px 2px 0}.save-status.error{color:#9c382c}.save-status.error::before{background:#9c382c}.about-button{border:0;background:none;color:var(--muted);font-size:11px;text-decoration:underline;text-underline-offset:4px;padding:5px 0;min-height:32px}.progress-info{font-size:11px;color:var(--muted);overflow-wrap:anywhere}.progress-info:empty{display:none}
+.workspace{margin-left:232px}.topbar{height:60px;padding:0 42px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.crumb{font-size:12px;color:var(--muted);display:flex;gap:14px}.crumb b{font-weight:500;color:var(--ink)}.top-right{font-size:11px;letter-spacing:1px;color:var(--muted)}.main{max-width:1500px;margin:auto;padding:30px 42px 24px}.welcome{margin-bottom:22px}.eyebrow{font-size:11px;letter-spacing:1.7px;color:var(--green);margin:0 0 8px}.welcome h1{font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:-.5px;line-height:1.4;margin:0;overflow-wrap:anywhere}.metrics{display:flex;gap:32px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;margin-bottom:25px}.metric>div{display:flex;align-items:baseline;gap:8px}.metric-label{color:var(--muted);font-size:11px}.metric-number{font-size:18px;font-weight:500;line-height:1.3;font-variant-numeric:tabular-nums}.metric-unit{font-size:10px;color:var(--muted)}.metric-icon{display:none}.section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.section-heading h2{font-size:18px;font-weight:550;margin:0}.section-heading p{font-size:11px;color:var(--muted);margin:3px 0 0}.small-action{border:0;background:none;color:var(--ink);font-size:12px;padding:8px 0;min-height:40px;white-space:nowrap}.small-action .icon{width:15px;height:15px;margin-left:8px}.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-bottom:22px}.search-wrap{display:flex;gap:9px;align-items:center;flex:1;min-width:170px;background:transparent;border:1px solid #c9c9be;padding:0 12px;height:42px;color:var(--muted)}.search-wrap input{border:0;outline:0;background:transparent;width:100%;min-width:0;font-size:12px;padding:9px 0}.search-wrap:focus-within{outline:2px solid var(--green);outline-offset:2px}.search-wrap input:focus-visible{outline:0}.difficulty{height:42px;border:1px solid #c9c9be;padding:0 9px;background:transparent;font-size:12px;max-width:135px}.filter-chip{height:42px;display:flex;align-items:center;gap:6px;padding:0 5px;font-size:11px;color:var(--muted);cursor:pointer;white-space:nowrap}.filter-chip input{accent-color:var(--green);width:14px;height:14px;margin:0}.filter-chip:has(input:checked){color:var(--green)}.result-count{font:11px var(--mono);color:var(--muted);white-space:nowrap}
+.content-grid{display:grid;grid-template-columns:minmax(0,1fr) 238px;gap:30px;align-items:start}.question-card{background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--ink)}.question-body{padding:24px 30px 22px}.question-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.question-position{font:11px var(--mono);color:var(--muted)}.question-position b{font-weight:500;color:var(--green)}.bookmark{border:0;background:transparent;color:var(--muted);display:flex;gap:6px;align-items:center;padding:8px 0 8px 8px;font-size:12px;min-height:36px;white-space:nowrap}.bookmark[aria-pressed=true]{color:var(--green)}.bookmark[aria-pressed=true]>.icon{fill:#caa38544}.question-title{font-family:var(--serif);font-size:29px;font-weight:600;line-height:1.65;letter-spacing:.1px;margin:20px 0 17px;white-space:pre-wrap;overflow-wrap:anywhere}.question-tags{display:flex;flex-wrap:wrap;gap:0;margin-bottom:26px}.tag{color:var(--muted);font-size:11px;padding-right:12px;line-height:1.5}.tag+.tag{border-left:1px solid var(--line);padding-left:12px}.tag.company{color:var(--green)}.answer-header{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:20px;margin-bottom:12px}.answer-header label{font-size:12px;font-weight:600}.char-count{font:11px var(--mono);color:var(--muted)}.answer-input{display:block;width:100%;min-height:220px;max-height:650px;resize:vertical;padding:16px;border:1px solid var(--line);border-radius:0;background:#fafaf5;font-size:15px;line-height:1.9;color:var(--ink)}.answer-input:focus{border-color:var(--green)}.reveal-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:17px}.reveal-actions{display:flex;flex-wrap:wrap;gap:8px}.primary-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font-size:12px;padding:11px 14px;min-height:42px;white-space:nowrap}.primary-button:not(:disabled):hover{background:#45463f}.primary-button>.icon{width:15px;height:15px}.secondary-button{border:1px solid #bdbeb3;background:transparent;padding:10px 13px;font-size:12px;min-height:42px}.secondary-button:hover{background:#eeeee5}.reveal-hint{font-size:11px;color:var(--muted)}.reveal-hint:empty{display:none}.reference-panel{border-top:1px solid var(--ink);background:#f0f0e7;padding:19px 20px;margin-top:22px}.reference-panel h3{font-size:13px;margin:0 0 8px;font-weight:600}.reference-status{font-size:11px;color:var(--muted);margin:0 0 12px}.reference-text{font-size:14px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}.reference-empty{font-size:13px;margin:0}.reference-empty-note{font-size:12px;color:var(--muted);margin:8px 0 0}.self-assessment{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border-top:1px solid var(--line);margin-top:24px;padding-top:18px}.self-assessment-label{font-size:11px;color:var(--muted)}.status-buttons{display:flex;gap:4px}.status-buttons button{border:1px solid transparent;background:none;font-size:11px;color:var(--muted);padding:8px 10px;min-height:36px}.status-buttons button[aria-pressed=true]{background:#e7e7dd;color:var(--ink);border-color:#c9c9bd}.status-buttons button[data-status=review][aria-pressed=true]{background:#f0e4d9;color:#85442b;border-color:#d9bfa9}.question-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 30px;border-top:1px solid var(--line)}.pager-button{display:flex;gap:8px;align-items:center;border:0;background:none;padding:6px 0;min-height:36px;font-size:12px;color:var(--muted)}.pager-button.next{color:var(--ink)}.pager-button>.icon{width:16px;height:16px}.pager-position{font:11px var(--mono);color:var(--muted)}
+.side-panel{display:flex;flex-direction:column;gap:28px}.note-card{order:-2;border-top:3px solid var(--ink);padding-top:20px}.note-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;margin-bottom:15px}.note-title label{font-weight:600}.note-title .icon{width:14px;height:14px;margin-right:6px;color:var(--muted)}.note-title small{font-size:10px;color:var(--muted)}.notes-input{display:block;resize:vertical;width:100%;min-height:220px;max-height:500px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:0 0 14px;font-size:13px;line-height:2;color:var(--ink)}.source-card{order:-1;border-top:1px solid var(--line);padding-top:12px}.source-card summary,.guide-card>summary{display:flex;justify-content:space-between;align-items:center;gap:8px;list-style:none;cursor:pointer;font-size:12px;font-weight:550;min-height:36px}.source-card summary::-webkit-details-marker,.guide-card>summary::-webkit-details-marker{display:none}.source-card summary>.icon,.guide-card>summary>.icon{width:14px;height:14px}.source-card[open] summary>.icon,.guide-card[open]>summary>.icon{transform:rotate(180deg)}.source-content{font-size:12px;color:var(--muted);line-height:1.8;overflow-wrap:anywhere;padding-top:10px}.source-content p{margin:5px 0}.source-entry+.source-entry{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}.source-entry h4{font-size:12px;margin:0 0 8px;color:var(--ink);font-weight:500}.source-excerpt{white-space:pre-wrap;margin:10px 0;padding-left:12px;border-left:2px solid #bdb4a1}.source-link{display:block;margin-top:10px;overflow-wrap:anywhere}.source-state,.source-no-link,.source-file{color:var(--muted)}.guide-card{border-top:1px solid var(--line);padding-top:12px}.guide-card[open]>summary{margin-bottom:15px}.guide-block h4{font-size:11px;font-weight:550;color:var(--green);margin:0 0 7px}.guide-block p{font-size:12px;color:var(--muted);line-height:1.9;margin:0;overflow-wrap:anywhere}.guide-block+.guide-block{margin-top:20px}.empty-state{min-height:390px;text-align:center;padding:70px 25px;border:1px solid var(--line)}.empty-state>.icon{width:30px;height:30px;color:var(--muted)}.empty-state h3{font-size:18px;font-weight:500;margin:18px 0 8px}.empty-state p{font-size:13px;color:var(--muted);margin:0 0 22px}.page-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-top:23px}.page-foot .icon{width:13px;height:13px;margin-right:6px}
+.dialog{border:1px solid var(--line);padding:0;width:min(760px,calc(100% - 32px));max-height:86vh;background:var(--paper);color:var(--ink);box-shadow:0 24px 90px #20201730}.dialog::backdrop{background:#26272366}.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:26px 30px 20px}.dialog-head h2{font-family:var(--serif);font-size:26px;font-weight:600;margin:0}.dialog-head p{font-size:12px;color:var(--muted);margin:7px 0 0}.icon-button{display:grid;place-items:center;border:1px solid var(--line);background:transparent;width:40px;height:40px;flex-shrink:0}.dialog-search{margin:0 30px 20px}.catalog-body{padding:0 30px 26px;max-height:60vh;overflow:auto}.catalog-topic{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:600;margin:24px 0 8px}.catalog-topic span{font-size:11px;font-weight:400;color:var(--muted)}.catalog-question{width:100%;display:flex;align-items:flex-start;gap:14px;padding:16px 0;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left}.catalog-question:hover{background:#f0f0e7}.catalog-number{font:11px/2 var(--mono);color:var(--muted)}.catalog-copy{flex:1;min-width:0}.catalog-title{display:block;font-size:14px;overflow-wrap:anywhere}.catalog-meta{display:block;font-size:11px;color:var(--muted);margin-top:4px}.catalog-status{font-size:11px;color:var(--green);white-space:nowrap}.catalog-empty{color:var(--muted);font-size:13px;padding:30px 0}.about-body{padding:0 30px 30px;font-size:13px;line-height:1.9;overflow-wrap:anywhere}.about-body h3{font-size:15px;margin:24px 0 10px}.about-body p{color:var(--muted)}.about-stat{display:flex;flex-wrap:wrap;gap:12px 25px;padding:13px 0;border-block:1px solid var(--line)}.about-stat span{font-size:12px}.about-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.import-note{padding:14px 18px;background:#eeeee5}.notice{position:fixed;z-index:20;bottom:24px;left:calc(50% + 116px);transform:translateX(-50%);display:flex;align-items:center;gap:18px;max-width:min(720px,calc(100% - 32px));padding:15px 19px;background:var(--ink);color:var(--paper);font-size:12px;box-shadow:0 8px 32px #0002}.notice.error{background:#783e31}.notice button{border:0;background:none;color:inherit;flex-shrink:0;padding:3px}.notice button .icon{width:15px;height:15px}.update-message{border-left:2px solid var(--green);background:#eee7dc;color:#75452e;padding:12px 16px;font-size:12px;margin:0 0 20px}.question-update{font-size:12px;color:var(--green);margin:0 0 14px}
+@media(min-width:1600px){.main{padding:40px 64px}.topbar{padding-inline:64px}.content-grid{grid-template-columns:minmax(0,1fr) 280px;gap:40px}.question-body{padding:30px 42px}.question-footer{padding-inline:42px}.answer-input{min-height:260px}.notes-input{min-height:260px}}
+@media(max-width:1150px){.sidebar{width:208px;padding:27px 16px}.workspace{margin-left:208px}.topbar{padding-inline:28px}.main{padding:28px}.content-grid{grid-template-columns:minmax(0,1fr) 200px;gap:22px}.question-body{padding:22px}.question-footer{padding-inline:22px}.welcome h1{font-size:30px}.metrics{gap:22px}.metric>div{gap:5px}.question-title{font-size:26px}.answer-input{min-height:210px}.notice{left:calc(50% + 104px)}}
+@media(max-width:980px){.content-grid{grid-template-columns:1fr}.side-panel{display:grid;grid-template-columns:1fr 1fr;align-items:start}.note-card{grid-row:span 2}.notes-input{min-height:180px}.source-card,.guide-card{order:0}.welcome h1{font-size:29px}.metrics{justify-content:space-between;gap:12px}.metric-unit{display:none}.result-count{margin-left:auto}}
+@media(max-width:760px){.sidebar{position:relative;width:auto;padding:22px 22px 12px;border-right:0;border-bottom:1px solid var(--line);overflow:visible}.brand{margin:0 0 22px}.brand strong{font-size:20px}.brand small{font-size:10px}.brand-mark{height:34px;width:28px}.nav-label{display:none}.topic-list{display:flex;overflow-x:auto;gap:6px;padding-bottom:6px}.topic-button{width:182px;flex:0 0 182px;padding:12px 10px;border-left:0;border-bottom:2px solid transparent;min-height:58px}.topic-button[aria-current=true]{border-left:0;border-bottom-color:var(--green)}.topic-title{font-size:12px}.topic-number{font-size:10px}.topic-count{font-size:10px}.side-all{position:absolute;right:22px;top:23px;border:0;padding:7px;margin:0;min-height:36px;font-size:12px}.side-all .count{display:none}.side-bottom{display:flex;flex-wrap:wrap;gap:3px 14px;align-items:center;padding-top:8px}.transfer{gap:8px}.transfer button{flex:auto;padding:7px 9px;min-height:36px;font-size:11px}.save-status{margin:0;font-size:10px}.side-bottom>.about-button{font-size:10px;margin-left:auto}.side-bottom>.progress-info{width:100%;margin:0}.workspace{margin-left:0}.topbar{height:47px;padding:0 22px}.crumb{font-size:11px}.top-right{font-size:10px}.main{padding:25px 22px}.welcome{margin-bottom:20px}.welcome h1{font-size:29px}.eyebrow{font-size:10px}.metrics{padding:13px 0;margin-bottom:24px;gap:8px}.metric>div{display:block}.metric-label{display:block;font-size:10px}.metric-number{font-size:21px}.section-heading h2{font-size:17px}.section-heading p{font-size:11px}.small-action{font-size:11px}.toolbar{gap:8px;margin-bottom:18px}.search-wrap{flex-basis:calc(100% - 121px);height:44px;min-width:130px}.search-wrap input{font-size:16px}.difficulty{height:44px;width:112px;font-size:12px}.filter-chip{height:36px;padding:0 5px;font-size:12px}.result-count{font-size:10px}.content-grid{gap:28px}.question-body{padding:20px}.question-top{align-items:center}.question-title{font-size:27px;margin:15px 0}.question-tags{margin-bottom:24px}.answer-input{font-size:16px;min-height:220px;padding:13px}.self-assessment{gap:9px}.status-buttons button{min-height:40px;padding:8px 9px}.question-footer{padding:12px 20px}.pager-button{min-height:40px}.side-panel{display:flex;gap:25px}.notes-input{font-size:16px;min-height:150px}.note-title{font-size:14px}.source-card summary,.guide-card>summary{font-size:13px;min-height:44px}.page-foot{font-size:10px;margin-top:22px}.page-foot .about-button{font-size:10px}.notice{left:50%;bottom:16px;width:calc(100% - 32px)}.dialog{width:calc(100% - 24px);max-height:90vh}.dialog-head{padding:22px}.dialog-head h2{font-size:24px}.dialog-search{margin:0 22px 18px}.catalog-body{padding:0 22px 22px;max-height:62vh}.catalog-title{font-size:14px}.catalog-question{gap:10px}.about-body{padding:0 22px 24px}.reference-text{font-size:14px}}
+@media(max-width:760px){.side-panel{align-items:stretch}.side-panel .source-card{order:-1}.side-bottom .transfer,.side-bottom>.about-button{display:none}.side-bottom{padding-top:5px}.topbar{display:none}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head><body>
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L3 9.6l6.3-.9Z"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol><symbol id="i-pen" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-4-4L5 15Z"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol><symbol id="i-repeat" viewBox="0 0 24 24"><path d="M20 8a8 8 0 0 0-14-3L3 8m0-5v5h5M4 16a8 8 0 0 0 14 3l3-3m0 5v-5h-5"/></symbol><symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol><symbol id="i-right" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol><symbol id="i-left" viewBox="0 0 24 24"><path d="M20 12H4m6-6-6 6 6 6"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol><symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3m-5 5 5-5 5 5M4 16v5h16v-5"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3c-9-1-16 3-15 10 1 6 9 8 12 2 2-4 0-8 3-12ZM4 21 15 9"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Zm-4 9 3 3 5-6"/></symbol></svg>
+
+<aside class="sidebar" aria-label="学习导航">
+  <div class="brand"><span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span><div><strong>面经练习簿</strong><small>本地题库</small></div></div>
+  <p class="nav-label">专题目录</p><nav id="topics" class="topic-list" aria-label="知识专题"></nav>
+  <button class="side-all" id="openCatalog"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span>全部题目</span><span class="count" id="catalogCount"></span></button>
+  <div class="side-bottom">
+    <div class="transfer"><button id="exportProgress"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>导出进度</button><button id="importProgress"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>导入进度</button></div>
+    <p id="saveStatus" class="save-status" role="status">进度仅保存在本机浏览器</p>
+    <p id="retainedInfo" class="progress-info"></p>
+    <button class="about-button" id="openAbout">学习包说明 / 进度备份</button>
+  </div>
+</aside>
+<div class="workspace">
+  <header class="topbar"><div class="crumb"><span>面经</span><span>/</span><b>练习</b></div><div class="top-right"><span>本地题库</span></div></header>
+  <main class="main">
+<section class="welcome"><p class="eyebrow">当前题库</p><h1 id="packTitle"></h1></section>
+    <p id="updateMessage" class="update-message" role="status" hidden></p>
+    <section class="metrics" aria-label="当前题库学习统计">
+      <div class="metric"><span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span><div><span class="metric-label">题库题目</span><span class="metric-number" id="totalCount"></span><span class="metric-unit">题</span></div></div>
+      <div class="metric"><span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-pen"/></svg></span><div><span class="metric-label">已作答</span><span class="metric-number" id="answeredCount">0</span><span class="metric-unit">题</span></div></div>
+      <div class="metric"><span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><div><span class="metric-label">已掌握</span><span class="metric-number" id="masteredCount">0</span><span class="metric-unit">题</span></div></div>
+      <div class="metric"><span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-repeat"/></svg></span><div><span class="metric-label">待复习</span><span class="metric-number" id="reviewCount">0</span><span class="metric-unit">题</span></div></div>
+    </section>
+    <div class="section-heading"><div><h2 id="topicHeading"></h2><p id="chapterHeading"></p></div><button class="small-action" id="openCatalogTop">题目目录<svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></button></div>
+    <div class="toolbar" aria-label="当前专题筛选">
+      <label class="search-wrap"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="搜索当前专题题目、公司…" aria-label="搜索当前专题题目、公司"></label>
+      <label class="sr-only" for="difficulty">筛选难度</label><select id="difficulty" class="difficulty"><option value="">全部难度</option></select>
+      <label class="filter-chip"><input type="checkbox" id="reviewOnly">只看需复习</label><label class="filter-chip"><input type="checkbox" id="favoriteOnly">只看收藏</label><span class="result-count" id="resultCount"></span>
+    </div>
+    <div class="content-grid">
+      <div>
+        <article id="questionCard" class="question-card" aria-labelledby="questionTitle">
+          <div class="question-body">
+            <div class="question-top"><span id="questionPosition" class="question-position"></span><button class="bookmark" id="favoriteButton" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><span id="favoriteLabel">收藏</span></button></div>
+            <h3 id="questionTitle" class="question-title"></h3><p id="questionUpdate" class="question-update" hidden>题面或参考已有更新；原作答与笔记已保留，请重新核对。</p><div class="question-tags" id="questionTags"></div>
+            <div class="answer-header"><label for="answer">我的回答</label><span class="char-count" id="charCount">0 字</span></div>
+            <textarea id="answer" class="answer-input" placeholder="写下你的回答…" spellcheck="false"></textarea>
+            <div class="reveal-row"><div class="reveal-actions"><button class="primary-button" id="revealReference" aria-controls="referencePanel" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><span id="revealLabel">展开参考</span><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></button><button class="secondary-button" id="learnReference" aria-controls="referencePanel">直接看参考</button></div><span id="revealHint" class="reveal-hint"></span></div>
+            <section id="referencePanel" class="reference-panel" hidden><h3>参考内容</h3><p id="referenceStatus" class="reference-status"></p><p id="referenceText" class="reference-text"></p><div id="referenceEmpty" hidden><p class="reference-empty">本题暂未提供参考答案。</p><p class="reference-empty-note">可将本题标为「需复习」，补充资料后继续。</p></div></section>
+            <div class="self-assessment"><span class="self-assessment-label">练习状态</span><div class="status-buttons" role="group" aria-label="练习状态"><button data-status="new" aria-pressed="true">未练</button><button data-status="review" aria-pressed="false">需复习</button><button data-status="mastered" aria-pressed="false">已掌握</button></div></div>
+          </div>
+          <footer class="question-footer"><button class="pager-button" id="previousQuestion"><svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>上一题</button><span class="pager-position" id="pagerPosition"></span><button class="pager-button next" id="nextQuestion">下一题<svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></button></footer>
+        </article>
+        <section id="emptyState" class="empty-state" hidden><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><h3>这里暂时没有题目</h3><p>试试其他关键词，或放宽当前专题的筛选条件。</p><button class="secondary-button" id="clearFilters">清除筛选</button></section>
+      </div>
+      <aside class="side-panel" aria-label="学习指引与笔记">
+        <section class="note-card" id="noteCard"><div class="note-title"><label for="notes"><svg class="icon" aria-hidden="true"><use href="#i-pen"/></svg>本题笔记</label><small>选填</small></div><textarea id="notes" class="notes-input" placeholder="补充例子、资料或疑问…" spellcheck="false"></textarea></section>
+        <details class="source-card" id="sourceCard"><summary>原题与出处<svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></summary><div class="source-content" id="sourceList"></div></details>
+        <details class="guide-card"><summary>专题练习建议<svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></summary><div class="guide-block"><h4>学习目标</h4><p id="guideGoal"></p></div><div class="guide-block"><h4>练习任务</h4><p id="guideTask"></p></div><div class="guide-block"><h4>自查要点</h4><p id="guideCriteria"></p></div></details>
+      </aside>
+    </div>
+    <footer class="page-foot"><span><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>作答与笔记保存在当前浏览器</span><button class="about-button" id="openAboutFooter">学习包说明 · 进度备份</button></footer>
+  </main>
+</div>
+<dialog id="catalogDialog" class="dialog" aria-labelledby="catalogTitle">
+  <div class="dialog-head"><div><h2 id="catalogTitle">全部题目</h2><p id="catalogSummary"></p></div><button class="icon-button" data-close="catalogDialog" aria-label="关闭题目目录"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <label class="search-wrap dialog-search"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="catalogSearch" type="search" placeholder="搜索全部题目…" aria-label="搜索全部题目"></label><div class="catalog-body" id="catalogList"></div>
+</dialog>
+<dialog id="aboutDialog" class="dialog" aria-labelledby="aboutTitle">
+  <div class="dialog-head"><div><h2 id="aboutTitle">学习包说明</h2><p>题目来源、数据更新与练习进度。</p></div><button class="icon-button" data-close="aboutDialog" aria-label="关闭学习包说明"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="about-body">
+    <div class="about-stat" id="aboutStats"></div><p id="aboutDescription"></p><h3>题目与资料来源</h3><p>每道题分别展示来源位置、原句与核验状态。参考内容的来源和可靠性请以本题标注为准；学习目标、练习与自查标准属于整理建议。</p>
+    <h3>练习进度与备份</h3><p>作答、笔记、收藏和自评状态按稳定题目 ID 保存。题库更新后，旧题进度会恢复；已移出题库的记录仍保留并包含在导出备份中。</p><p id="aboutRetained"></p>
+    <p>题面或参考更新时保留作答与笔记，并将「已掌握」改为「需复习」。更换浏览器、移动本地 HTML 文件或清除浏览器数据可能需要导入备份，请定期导出。</p>
+    <p class="import-note">导入按题目 ID 合并：备份中同 ID 的作答、笔记、状态和收藏会覆盖当前记录，备份未提供的记录保持不变。仅接受同一学习包的进度 JSON；校验失败时不改动现有进度。</p>
+    <div class="about-actions"><button class="primary-button" id="exportProgressAbout"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>导出练习进度</button><button class="secondary-button" id="importProgressAbout">导入练习进度</button></div>
+  </div>
+</dialog>
+<dialog id="importDialog" class="dialog" aria-labelledby="importTitle">
+  <div class="dialog-head"><div><h2 id="importTitle">导入练习进度</h2><p>选择同一学习包的 JSON 备份。</p></div><button class="icon-button" data-close="importDialog" aria-label="关闭导入说明"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="about-body"><p class="import-note">相同题目 ID 的记录将以导入内容覆盖当前作答、笔记、状态和收藏；未提供的题目保持现状。当前题库不存在的旧记录仍会保存和导出。</p><p>需要保留当前版本时，可先导出备份。全部校验通过后才合并记录。</p><div class="about-actions"><button class="secondary-button" id="exportBeforeImport">先导出当前进度</button><button class="primary-button" id="chooseImportFile">选择 JSON 并导入</button></div></div>
+</dialog>
+<input id="importFile" type="file" accept="application/json,.json" hidden>
+<div class="notice" id="notice" role="status" hidden><span id="noticeText"></span><button id="dismissNotice" aria-label="关闭提示"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+<script id="studyPack" type="application/json">__STUDY_PACK_JSON__</script>
+<script>
+'use strict';
+const PACK = JSON.parse(document.getElementById('studyPack').textContent);
+const VERSION = 1;
+const STORAGE_KEY = 'interview-study.progress.v1:' + PACK.pack_id;
+const $ = id => document.getElementById(id);
+const questions = PACK.questions;
+const byId = new Map(questions.map(q => [q.id, q]));
+const statusLabels = {new: '未练', review: '需复习', mastered: '已掌握'};
+const levelOf = q => q.level.trim() || '待定';
+const emptyRecord = q => ({answer: '', notes: '', status: 'new', favorite: false, revision: q.revision});
+let progress = new Map(questions.map(q => [q.id, emptyRecord(q)]));
+let position = {topic: questions[0].topic, qid: questions[0].id};
+let filters = {query: '', level: '', reviewOnly: false, favoriteOnly: false};
+let revealed = false, noticeTimer;
+const updatedIds = new Set();
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function showNotice(message, error = false) {
+  clearTimeout(noticeTimer);
+  $('noticeText').textContent = message;
+  $('notice').classList.toggle('error', error);
+  $('notice').hidden = false;
+  if (!error) noticeTimer = setTimeout(() => { $('notice').hidden = true; }, 6000);
+}
+function snapshot() {
+  return {version: VERSION, pack_id: PACK.pack_id,
+    progress: Array.from(progress, ([id, row]) => ({id, ...row})), position: {...position}};
+}
+function validateBackup(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || value.version !== VERSION)
+    throw new Error('备份版本无效，请选择本学习页导出的进度 JSON。');
+  if (typeof value.pack_id !== 'string' || value.pack_id !== PACK.pack_id)
+    throw new Error('备份属于其他学习包，不能导入。');
+  if (!Array.isArray(value.progress)) throw new Error('备份缺少进度记录列表。');
+  const rows = new Map();
+  for (const row of value.progress) {
+    if (!row || typeof row !== 'object' || Array.isArray(row) || typeof row.id !== 'string' || !row.id.trim())
+      throw new Error('题目 ID 必须是非空文本。');
+    if (rows.has(row.id)) throw new Error('备份包含重复的题目 ID。');
+    if (typeof row.answer !== 'string' || typeof row.notes !== 'string' || typeof row.revision !== 'string')
+      throw new Error('作答、笔记和题目版本必须是文本。');
+    if (typeof row.status !== 'string' || !Object.prototype.hasOwnProperty.call(statusLabels, row.status) || typeof row.favorite !== 'boolean')
+      throw new Error('备份中的练习状态或收藏标记无效。');
+    rows.set(row.id, {answer: row.answer, notes: row.notes, status: row.status, favorite: row.favorite, revision: row.revision});
+  }
+  return rows;
+}
+// 先完成整份备份的校验，再按 ID 合并；不删除当前页面以外的记录。
+function mergeRecords(rows) {
+  for (const [id, row] of rows) progress.set(id, row);
+  let changed = false;
+  for (const q of questions) {
+    const row = progress.get(q.id);
+    if (row.revision !== q.revision) {
+      if (row.status === 'mastered') row.status = 'review';
+      row.revision = q.revision;
+      updatedIds.add(q.id);
+      changed = true;
+    }
+  }
+  return changed;
+}
+function storageError(message) {
+  $('saveStatus').textContent = message;
+  $('saveStatus').classList.add('error');
+}
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot()));
+    $('saveStatus').textContent = '已保存到本机 · ' + new Date().toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+    $('saveStatus').classList.remove('error');
+    return true;
+  } catch (error) {
+    storageError('浏览器未能保存进度，请立即导出 JSON 备份。');
+    return false;
+  }
+}
+function restore() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const value = JSON.parse(raw);
+    const changed = mergeRecords(validateBackup(value));
+    const savedPosition = value.position;
+    if (savedPosition && typeof savedPosition.qid === 'string' && byId.has(savedPosition.qid)) {
+      const q = byId.get(savedPosition.qid);
+      position = {topic: q.topic, qid: q.id};
+    }
+    $('saveStatus').textContent = '已恢复本机练习进度';
+    if (changed) save();
+  } catch (error) {
+    storageError('本地进度无法读取，请导入备份；新进度请及时导出。');
+  }
+}
+function filteredQuestions() {
+  const query = filters.query.trim().toLocaleLowerCase();
+  return questions.filter(q => q.topic === position.topic &&
+    (!filters.level || levelOf(q) === filters.level) &&
+    (!filters.reviewOnly || progress.get(q.id).status === 'review') &&
+    (!filters.favoriteOnly || progress.get(q.id).favorite) &&
+    (!query || [q.question, q.chapter, q.kind, ...q.companies].join(' ').toLocaleLowerCase().includes(query)));
+}
+function updateMetrics() {
+  let answered = 0, mastered = 0, review = 0;
+  for (const q of questions) {
+    const row = progress.get(q.id);
+    if (row.answer.trim()) answered++;
+    if (row.status === 'mastered') mastered++;
+    if (row.status === 'review') review++;
+  }
+  $('answeredCount').textContent = answered;
+  $('masteredCount').textContent = mastered;
+  $('reviewCount').textContent = review;
+  const retained = Array.from(progress.keys()).filter(id => !byId.has(id)).length;
+  $('retainedInfo').textContent = retained ? '另保留 ' + retained + ' 条已移出题库的进度，导出时一并备份。' : '';
+  $('aboutRetained').textContent = '当前题库 ' + questions.length + ' 题；另保留 ' + retained + ' 条旧题进度。学习统计只计算当前题库。';
+  $('updateMessage').hidden = !updatedIds.size;
+  $('updateMessage').textContent = updatedIds.size + ' 题的题面或参考已有更新，作答和笔记已保留；其中原为「已掌握」的题目已改为「需复习」。';
+}
+function renderTopics() {
+  const fragment = document.createDocumentFragment();
+  PACK.topics.forEach((topic, index) => {
+    const group = questions.filter(q => q.topic === topic.name);
+    const mastered = group.filter(q => progress.get(q.id).status === 'mastered').length;
+    const button = el('button', 'topic-button');
+    button.dataset.topic = topic.name;
+    button.setAttribute('aria-current', String(position.topic === topic.name));
+    button.setAttribute('aria-label', topic.name + '，已掌握 ' + mastered + ' / ' + group.length + ' 题');
+    button.append(el('span', 'topic-number', String(index + 1).padStart(2, '0')));
+    const copy = el('span', 'topic-copy'), title = el('span', 'topic-title', topic.name.replace(/^\d+[.\s、]+/, ''));
+    title.append(el('span', 'topic-count', mastered + '/' + group.length));
+    copy.append(title, el('span', 'topic-sub', group.length && group[0].chapter !== topic.name ? group[0].chapter : ''));
+    const bar = el('span', 'topic-progress'), fill = el('i');
+    fill.style.width = (group.length ? mastered / group.length * 100 : 0) + '%';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.append(fill); copy.append(bar); button.append(copy); fragment.append(button);
+  });
+  $('topics').replaceChildren(fragment);
+}
+function renderReference(q) {
+  $('referencePanel').hidden = !revealed;
+  $('revealReference').setAttribute('aria-expanded', String(revealed));
+  $('revealLabel').textContent = revealed ? '收起参考' : '展开参考';
+  $('referenceStatus').textContent = q.referenceStatus;
+  $('referenceText').textContent = q.reference;
+  $('referenceText').hidden = !q.reference.trim();
+  $('referenceEmpty').hidden = !!q.reference.trim();
+  updateAnswerState();
+}
+function updateAnswerState() {
+  const row = progress.get(position.qid);
+  $('charCount').textContent = Array.from(row.answer).length + ' 字';
+  $('revealReference').disabled = !row.answer.trim() && !revealed;
+  $('learnReference').hidden = revealed || !!row.answer.trim();
+  $('revealHint').textContent = '';
+}
+function renderSources(q) {
+  const fragment = document.createDocumentFragment();
+  if (q.evidence) {
+    const evidence = el('section', 'source-entry');
+    evidence.append(el('h4', '', '归纳依据'), el('blockquote', 'source-excerpt', q.evidence));
+    fragment.append(evidence);
+  }
+  q.sources.forEach((source, index) => {
+    const entry = el('section', 'source-entry');
+    entry.append(el('h4', '', (index + 1) + '. ' + (source.title || '来源依据')));
+    if (source.file) entry.append(el('p', 'source-file', source.file));
+    if (source.location) entry.append(el('p', '', source.location));
+    if (source.status) entry.append(el('p', 'source-state', source.status));
+    entry.append(el('blockquote', 'source-excerpt', source.excerpt || '此来源未提供原句。'));
+    if (source.url) {
+      let href = '';
+      try {
+        const url = new URL(source.url);
+        if (url.protocol === 'http:' || url.protocol === 'https:') href = url.href;
+      } catch (error) { /* 非 URL 的来源文字仍按原文展示。 */ }
+      if (href) {
+        const link = el('a', 'source-link', source.url + ' ↗');
+        link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer'; entry.append(link);
+      } else entry.append(el('p', 'source-no-link', source.url));
+    }
+    fragment.append(entry);
+  });
+  if (!q.sources.length) fragment.append(el('p', 'source-no-link', '此题尚未提供来源依据。'));
+  $('sourceList').replaceChildren(fragment);
+}
+function render() {
+  const list = filteredQuestions();
+  if (list.length && !list.some(q => q.id === position.qid)) { position.qid = list[0].id; revealed = false; }
+  const q = list.find(q => q.id === position.qid);
+  const topic = PACK.topics.find(t => t.name === position.topic);
+  const group = questions.filter(item => item.topic === position.topic);
+  $('topicHeading').textContent = topic.name.replace(/^\d+[.\s、]+/, '');
+  $('chapterHeading').textContent = '本专题 ' + group.length + ' 道题';
+  $('guideGoal').textContent = topic.goal; $('guideTask').textContent = topic.task; $('guideCriteria').textContent = topic.criteria;
+  $('resultCount').textContent = list.length + ' / ' + group.length + ' 题';
+  $('questionCard').hidden = !q; $('emptyState').hidden = !!q; $('noteCard').hidden = !q; $('sourceCard').hidden = !q;
+  renderTopics(); updateMetrics();
+  if (!q) return;
+  const row = progress.get(q.id), index = list.findIndex(item => item.id === q.id);
+  $('questionPosition').replaceChildren(document.createTextNode('题目 '), el('b', '', String(index + 1).padStart(2, '0')), document.createTextNode(' / ' + String(list.length).padStart(2, '0')));
+  $('questionTitle').textContent = q.question;
+  $('questionUpdate').hidden = !updatedIds.has(q.id);
+  $('questionTags').replaceChildren(el('span', 'tag', q.kind.replace('来源支持的归纳题', '归纳题')), ...(levelOf(q) === '待定' ? [] : [el('span', 'tag level', levelOf(q))]), ...q.companies.map(name => el('span', 'tag company', name)));
+  $('favoriteButton').setAttribute('aria-pressed', String(row.favorite));
+  $('favoriteButton').setAttribute('aria-label', row.favorite ? '取消收藏本题' : '收藏本题');
+  $('favoriteLabel').textContent = row.favorite ? '已收藏' : '收藏';
+  $('answer').value = row.answer; $('notes').value = row.notes;
+  document.querySelectorAll('[data-status]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.status === row.status)));
+  renderReference(q); renderSources(q);
+  $('previousQuestion').disabled = index === 0; $('nextQuestion').disabled = index === list.length - 1;
+  $('pagerPosition').textContent = (index + 1) + ' / ' + list.length;
+}
+function resetFilters() {
+  filters = {query: '', level: '', reviewOnly: false, favoriteOnly: false};
+  $('search').value = ''; $('difficulty').value = ''; $('reviewOnly').checked = false; $('favoriteOnly').checked = false;
+}
+function chooseTopic(name) {
+  const first = questions.find(q => q.topic === name);
+  position = {topic: name, qid: first ? first.id : ''};
+  resetFilters(); revealed = false; render(); save();
+}
+function navigateToQuestion(qid) {
+  const q = byId.get(qid);
+  position = {topic: q.topic, qid: q.id};
+  resetFilters(); revealed = false; render(); save(); $('catalogDialog').close();
+  $('questionTitle').setAttribute('tabindex', '-1'); $('questionTitle').focus({preventScroll: true});
+  $('questionCard').scrollIntoView({behavior: 'auto', block: 'nearest'});
+}
+function moveQuestion(delta) {
+  const list = filteredQuestions(), index = list.findIndex(q => q.id === position.qid), next = list[index + delta];
+  if (!next) return;
+  position.qid = next.id; revealed = false; render(); save();
+}
+function syncFilter() {
+  filters = {query: $('search').value, level: $('difficulty').value, reviewOnly: $('reviewOnly').checked, favoriteOnly: $('favoriteOnly').checked};
+  revealed = false; render(); save();
+}
+function updateRecord(change) {
+  const oldIndex = filteredQuestions().findIndex(q => q.id === position.qid);
+  change(progress.get(position.qid));
+  const list = filteredQuestions();
+  if (list.length && !list.some(q => q.id === position.qid)) {
+    position.qid = list[Math.min(Math.max(oldIndex, 0), list.length - 1)].id; revealed = false;
+  }
+  render(); save();
+}
+function renderCatalog() {
+  const query = $('catalogSearch').value.trim().toLocaleLowerCase(), fragment = document.createDocumentFragment();
+  let found = 0;
+  PACK.topics.forEach(topic => {
+    const group = questions.filter(q => q.topic === topic.name && (!query || [q.question, q.topic, q.chapter, ...q.companies].join(' ').toLocaleLowerCase().includes(query)));
+    if (!group.length) return;
+    found += group.length;
+    const heading = el('h3', 'catalog-topic', topic.name); heading.append(el('span', '', group.length + ' 题')); fragment.append(heading);
+    group.forEach(q => {
+      const row = progress.get(q.id), button = el('button', 'catalog-question');
+      button.dataset.qid = q.id;
+      button.append(el('span', 'catalog-number', String(questions.indexOf(q) + 1).padStart(2, '0')));
+      const copy = el('span', 'catalog-copy');
+      copy.append(el('span', 'catalog-title', q.question), el('span', 'catalog-meta', levelOf(q) + ' · ' + q.kind + (row.answer.trim() ? ' · 已作答' : '')));
+      button.append(copy, el('span', 'catalog-status', (row.favorite ? '★ ' : '') + statusLabels[row.status])); fragment.append(button);
+    });
+  });
+  if (!found) fragment.append(el('p', 'catalog-empty', '没有匹配的题目，试试其他关键词。'));
+  $('catalogList').replaceChildren(fragment);
+}
+function openCatalog() { $('catalogSearch').value = ''; renderCatalog(); $('catalogDialog').showModal(); }
+function exportProgress() {
+  const blob = new Blob([JSON.stringify(snapshot(), null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob), link = document.createElement('a');
+  link.href = url; link.download = '面经练习簿-练习进度-' + new Date().toISOString().slice(0, 10) + '.json';
+  document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showNotice('已生成 ' + progress.size + ' 条进度的备份，包含保留的旧题记录。');
+}
+async function importProgress(file) {
+  if (!file) return;
+  try {
+    let value;
+    try { value = JSON.parse(await file.text()); }
+    catch (error) { throw new Error('无法读取有效的 JSON，请检查所选备份文件。'); }
+    const rows = validateBackup(value);
+    mergeRecords(rows); resetFilters(); revealed = false; render();
+    const saved = save();
+    showNotice(saved ? '已按 ID 合并 ' + rows.size + ' 条记录；同 ID 记录已覆盖，其他记录保留。' : '进度已在本页恢复，但浏览器保存失败，请立即导出备份。', !saved);
+  } catch (error) {
+    showNotice('导入失败：' + error.message + ' 原有进度未改动。', true);
+  } finally { $('importFile').value = ''; }
+}
+$('topics').addEventListener('click', event => { const button = event.target.closest('[data-topic]'); if (button) chooseTopic(button.dataset.topic); });
+$('search').addEventListener('input', syncFilter);
+['difficulty', 'reviewOnly', 'favoriteOnly'].forEach(id => $(id).addEventListener('change', syncFilter));
+$('clearFilters').addEventListener('click', () => { resetFilters(); revealed = false; render(); save(); });
+$('answer').addEventListener('input', () => { progress.get(position.qid).answer = $('answer').value; updateAnswerState(); updateMetrics(); save(); });
+$('notes').addEventListener('input', () => { progress.get(position.qid).notes = $('notes').value; save(); });
+$('revealReference').addEventListener('click', () => { revealed = !revealed; renderReference(byId.get(position.qid)); });
+$('learnReference').addEventListener('click', () => { revealed = true; renderReference(byId.get(position.qid)); });
+$('favoriteButton').addEventListener('click', () => updateRecord(row => { row.favorite = !row.favorite; }));
+document.querySelectorAll('[data-status]').forEach(button => button.addEventListener('click', () => updateRecord(row => { row.status = button.dataset.status; })));
+$('previousQuestion').addEventListener('click', () => moveQuestion(-1)); $('nextQuestion').addEventListener('click', () => moveQuestion(1));
+['openCatalog', 'openCatalogTop'].forEach(id => $(id).addEventListener('click', openCatalog));
+$('catalogSearch').addEventListener('input', renderCatalog);
+$('catalogList').addEventListener('click', event => { const button = event.target.closest('[data-qid]'); if (button) navigateToQuestion(button.dataset.qid); });
+['openAbout', 'openAboutFooter'].forEach(id => $(id).addEventListener('click', () => $('aboutDialog').showModal()));
+document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => $(button.dataset.close).close()));
+document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('click', event => {
+  if (event.target !== dialog) return;
+  const rect = dialog.getBoundingClientRect();
+  if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+}));
+['exportProgress', 'exportProgressAbout', 'exportBeforeImport'].forEach(id => $(id).addEventListener('click', exportProgress));
+['importProgress', 'importProgressAbout'].forEach(id => $(id).addEventListener('click', () => { $('aboutDialog').close(); $('importDialog').showModal(); }));
+$('chooseImportFile').addEventListener('click', () => { $('importDialog').close(); $('importFile').click(); });
+$('importFile').addEventListener('change', event => importProgress(event.target.files[0]));
+$('dismissNotice').addEventListener('click', () => { $('notice').hidden = true; clearTimeout(noticeTimer); });
+document.title = PACK.title + ' · 面经练习簿';
+$('packTitle').textContent = PACK.title;
+$('aboutDescription').textContent = PACK.description;
+$('totalCount').textContent = questions.length; $('catalogCount').textContent = questions.length;
+$('catalogSummary').textContent = PACK.topics.length + ' 个专题 · ' + questions.length + ' 道题目，点击即可开始练习';
+$('aboutStats').replaceChildren(el('span', '', PACK.topics.length + ' 个专题'), el('span', '', questions.length + ' 道题目'), el('span', '', questions.filter(q => q.reference.trim()).length + ' 题含参考'));
+for (const level of new Set(questions.map(levelOf))) { const option = el('option', '', level); option.value = level; $('difficulty').append(option); }
+restore(); render();
+</script>
+</body></html>
