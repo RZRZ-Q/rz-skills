@@ -63,6 +63,7 @@ python3 /path/to/installed-skill/scripts/storage.py init --root /absolute/select
 
 定位后按本轮目标读取相关资料：
 
+- 工作清单的 `last_run` 若引用提取纠错和纠正后的分析输入／目录，分析时一并读取并按稳定 ID 与原观察时间应用；原始账本或采集目录仍用于历史比较。读取更正结果不表示重新抓取来源，具体保存方式沿用对应模块的追踪文档。
 - `ai-jobs`：读取 `paths.jobs_watchlist` 的范围、偏好和来源，使用 `paths.jobs_db` 查询岗位及历史。`baselines.jobs_observations` 是最近一批输入，不等于整个岗位历史。
 - `ai-tech-radar`：读取 `paths.radar_watchlist`，以 `baselines.radar_catalog` 作为后续目录命令的 `--previous`。目录含之前保留的材料，不表示本轮全部重新读取；按任务需要读取原输入和证据。
 - `ai-career`：读取所需分支的工作清单、基线与运行记录，沿稳定 ID 查证据；`career_handoff` 是雷达到总入口的交接产物，不是个人进度索引。保存计划或续接个人进展时，再读 `<root>/data/career/state.json` 及其相关计划／复盘引用，按[进展续接](progress.md)处理。只使用与本轮目标相关的资料，JD 关联仍按需进行。
@@ -76,5 +77,7 @@ python3 /path/to/installed-skill/scripts/storage.py init --root /absolute/select
 传给脚本的账本、输入、输出与上一轮目录使用返回的绝对路径。保存到记录中的相对证据路径、watchlist 路径和报告路径一律相对于数据根目录；读取时也从该根目录解析，不相对于技能安装目录或本轮聊天目录。
 
 每轮新建独立运行目录，保留原始 JSONL、必要正文和目录快照。岗位的新观察追加到同一账本；雷达用旧目录合并新观察并生成新快照。成功写入并回读后才更新 watchlist 的基线指针；失败、未复查或只扩充来源不会清空历史，也不冒充新观察。
+
+推进 `last_run` 时，新运行记录继续引用仍匹配稳定 ID 与原观察时间的既有纠错；当前分析输入／视图基于本轮账本或目录应用这些纠错，不直接用旧分析快照替代新增结果。新来源观察不自动继承旧纠错。
 
 备份或迁移须同时保留配置所指的整个库及记录引用的文件。旧观察引用 `tmp/` 或库外绝对路径时，继续保留相应证据；仅复制技能包不包含这些个人数据。改变默认根目录只是选择库，不会自动搬迁或合并已有历史。

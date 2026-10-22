@@ -19,11 +19,11 @@
 | `job_key`, `company`, `title` | 稳定身份、公司名称、来源标题 |
 | `recruitment_type` | `internship` / `campus` / `experienced` / `unknown`，指招聘渠道 |
 | `source_url`, `source_kind` | HTTP(S) 来源链接；`official` / `third_party` / `user_document`，指本次实际读到的来源 |
-| `observed_at` | 来源观察时间：带时区 ISO8601 或只有日期的 `YYYY-MM-DD` |
+| `observed_at` | 实际获取来源的时间，取自访问记录：带时区 ISO8601 或只有日期的 `YYYY-MM-DD`；提取、整理和入库时间另记 |
 | `verification`, `status` | `live` / `historical`；`open` / `closed` / `unknown` |
 | `requirements` | 数组，条目含原句 `text`、`kind`、`skill_tags` 字符串数组 |
 
-`kind` 为 `must` / `preferred` / `responsibility` / `unspecified`。条目可增加 `source_ref`、原始逻辑说明等字段。不要删掉无法分类的原句。
+`kind` 为 `must` / `preferred` / `responsibility` / `unspecified`。条目可增加 `source_ref`、所属分区、相邻限定及原始逻辑说明等字段。无法分类的候选条件保留原句并标 `unspecified`；非条件说明留在原始正文，不混入 `requirements`。按[能力提取](discovery.md#从文本提取能力)核对段落语义后再入库，账本的字段校验不判断必需／优先分类是否正确。
 
 按来源增加门户身份 `source_id`、`source_job_id`、`locations`、`hiring_cycle`、`candidate_stage_raw`、`education_raw`、`experience_raw`、`application_deadline`、`company_tier`、`company_tier_basis`、`role_family`、`salary`、`source_published_at`、`source_updated_at`、`source_ref`、`source_refs`、`raw_text`、`notes`。`company_tier` 使用 `large/mid/small/unknown`；地区、规模、届别没有证据时不补造。`role_family` 是分析分类，可说明依据。已有观察没有 `source_id` 时可在运行记录或 watchlist 关联，不为补字段改写历史。
 
@@ -44,11 +44,15 @@ python3 /path/to/ai-jobs/scripts/job_ledger.py list --db /absolute/selected-root
 python3 /path/to/ai-jobs/scripts/job_ledger.py diff --db /absolute/selected-root/data/jobs.sqlite3 --before 2026-09-07 --after 2026-10-13
 ```
 
-脚本只做存储与比较，不联网。观察按 `job_key + UTC 观察时间` 幂等；同一键／时间的不同内容会报冲突并回滚整批。新增版本使用真实的新观察时间，纠错不能伪造后续观察或删除旧证据。原始材料读错需要纠正时另存纠错说明，明确统计采用哪份记录。
+脚本只做存储与比较，不联网。观察按 `job_key + UTC 观察时间` 幂等；同一键／时间的不同内容会报冲突并回滚整批。新增版本使用真实的新观察时间，纠错不能伪造后续观察或删除旧证据。
 
 `list` 取各岗位截至指定时刻的最近观察；日期截止包含 UTC 整天，精确时点用带时区 ISO8601。乱序导入不会覆盖更新的观察。`diff` 比较标题、地点、招聘渠道、届别、候选阶段、学历／经验、截止日期、方向、要求、薪资、状态；要求条目比较原句、类别和技能标签，原文位置和采集时间变化不算需求变化。集合中没有再次出现的岗位保留旧状态，不自动关闭。
 
 `added_to_sample` 只表示第一次进入所选样本，不等于最近新发布或新增 HC。要求增删仍需读取差异上下文，判断是措辞变化、真正能力变化还是提取格式变化；脚本不是语义裁判。
+
+## 提取纠错
+
+只重读本地证据时不调用 `ingest` 追加观察。已入库的提取错误另存纠错记录和纠正后的分析输入，定位原 `job_key` 与原观察时间，保存原值、修正值、依据和纠错时间；保留原观察与原文，纠错时间不替代来源观察时间。把纠错文件与分析输入路径写入现有 `run.json`，经 watchlist 的 `last_run` 及交接说明供后续会话找回；修正旧轮时也在当前运行记录保留引用。分析和匹配采用适用于该次观察的纠正结果，新来源观察不自动继承旧纠错。`list/diff` 仍读取原始账本，提取纠错不解释为招聘要求变化；没有纠错时沿用原输入，不创建空纠错文件。
 
 ## 来源清单与扩充
 

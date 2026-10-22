@@ -20,7 +20,8 @@ description: 搜索、核实和追踪 AI 实习、校招、社招岗位，维护
 | 查找具身智能、机器人公司的岗位来源 | [具身智能分表](references/embodied-sources.md)，分别核实算法、数据、控制与硬件方向 |
 | 查找 AI 芯片、IC 设计与计算平台岗位来源 | [芯片与 IC 分表](references/chip-ic-sources.md)，区分 AI 软件栈、数字／模拟设计、验证和物理实现 |
 | 保存观察、复查状态、比较新旧要求 | [记录与追踪](references/tracking.md)，使用 `scripts/job_ledger.py` |
-| 比较公司、方向、招聘阶段与能力需求 | [招聘样本分析](references/market.md) |
+| 复核已有提取、纠正条件或归属 | [提取纠错](references/tracking.md#提取纠错)，依据已有证据更新分析输入；重新获取来源时才新增观察 |
+| 比较公司、方向、招聘阶段与能力需求 | [招聘样本分析](references/market.md)；调查当前／近期需求时先按[岗位采集](references/discovery.md)确定时间窗口和在招样本覆盖 |
 
 沿用对话或 `ai-career` 已提供的公司、方向、阶段、地区、时间和工作目录。仅补问会改变本轮正确性或范围的缺口；岗位采集和样本分析不要求完整个人画像。指定材料的整理不默认扩大成全网采集。
 

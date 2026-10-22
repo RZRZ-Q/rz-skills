@@ -9,7 +9,7 @@ description: 跟踪公司、技术团队和研究 Lab 的工程文章、公众�
 
 ## 按问题读取
 
-- 获取新材料、首次建立来源或持续复查：读[采集与记录](references/collection.md)。先沿用已有主题、团队和材料；普通小问题不启动全网扫描。
+- 获取新材料、首次建立来源或持续复查：读[采集与记录](references/collection.md)。先沿用已有主题、团队和材料；关注近期或最新动态时，按[近期候选与深读顺序](references/collection.md#近期候选与深读顺序)核对更新、选择正文并保留取舍依据。普通小问题不启动全网扫描。
 - 建立固定团队 list、新增公众号／Lab／仓库或暂停来源：读[固定来源清单](references/source-list.md)及[清单维护](references/tracking.md#来源清单与扩充)。
 - 系统发现公司内研究组与工程项目：读[逐公司团队清单](_shared/references/team-inventory.md)，按本轮公司／行业范围查团队目录、代码组织、模型页和论文机构，记录覆盖与缺口。
 - 补充或追踪技术公众号：读[公众号固定清单](references/wechat-sources.md)；需要发现文章或读取正文时，按[公众号采集路径](references/collection.md#公众号发现与正文读取)核对名称与别名，结合搜狗、官方目录和真实互链定位原文，再用已有会话导出脚本读取。账号归属、原文与官方替代目录分别记录。
