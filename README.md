@@ -15,7 +15,7 @@
 
 ## 安装
 
-当前版本：[v0.1.0-beta.4](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.4)。可以安装整套 AI Career，也可以只装需要的模块：
+当前版本：[v0.1.0-beta.5](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.5)。可以安装整套 AI Career，也可以只装需要的模块：
 
 | 安装范围 | 仓库路径 | 安装后的入口 |
 |---|---|---|
@@ -27,15 +27,15 @@
 把下面任一请求交给支持 Agent Skills 的工具：
 
 ```text
-从 https://github.com/RZRZ-Q/rz-skills 的 v0.1.0-beta.4 安装 ai-career 整个目录。
+从 https://github.com/RZRZ-Q/rz-skills 的 v0.1.0-beta.5 安装 ai-career 整个目录。
 ```
 
 ```text
-只从 https://github.com/RZRZ-Q/rz-skills 的 v0.1.0-beta.4 安装
+只从 https://github.com/RZRZ-Q/rz-skills 的 v0.1.0-beta.5 安装
 ai-career/modules/ai-tech-radar，不安装整个套件。
 ```
 
-也可从 [Releases](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.4) 下载 ZIP 与 SHA256SUMS。使用 Codex 的 skill-installer 时，选择 `--ref v0.1.0-beta.4`；整套使用 `--path ai-career`，单装使用上表中的子路径。
+也可从 [Releases](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.5) 下载 ZIP 与 SHA256SUMS。使用 Codex 的 skill-installer 时，选择 `--ref v0.1.0-beta.5`；整套使用 `--path ai-career`，单装使用上表中的子路径。
 
 已有源码副本时，也可以复制整个目标目录，以项目级安装为例：
 
@@ -191,7 +191,7 @@ Skill 不绑定模型。使用 Codex 时，可选择以下配置：
 - **学习页进度**：保存在当前浏览器中，跨浏览器或设备需导出／导入。已验证通过本地 HTTP 访问，直接双击 HTML 尚未验证。
 - **面经图片**：原文复核和飞书入库回读完成后，默认删除本批临时图片及截图，保留来源链接与文字；用户原文件和明确要求保留的图片除外。
 
-版本变化和已完成的验证见[发行说明](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.4)。反馈问题时请提供去除个人信息和认证参数的最小示例。
+版本变化和已完成的验证见[发行说明](https://github.com/RZRZ-Q/rz-skills/releases/tag/v0.1.0-beta.5)。反馈问题时请提供去除个人信息和认证参数的最小示例。
 
 ## 仓库结构与维护
 

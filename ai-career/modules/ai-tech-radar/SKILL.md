@@ -9,7 +9,7 @@ description: 跟踪公司、技术团队和研究 Lab 的工程文章、公众�
 
 ## 按问题读取
 
-- 获取新材料、首次建立来源或持续复查：读[采集与记录](references/collection.md)。先沿用已有主题、团队和材料；关注近期或最新动态时，按[近期候选与深读顺序](references/collection.md#近期候选与深读顺序)核对更新、选择正文并保留取舍依据。普通小问题不启动全网扫描。
+- 获取并保存新材料或持续复查：从[采集主流程](references/collection.md#采集主流程)开始，依次准备历史库、发现候选、排重并安排阅读，再取得正文和分析。工程／研究说明用于后续分析，不替代这条采集流程。普通小问题不启动全网扫描。
 - 建立固定团队 list、新增公众号／Lab／仓库或暂停来源：读[固定来源清单](references/source-list.md)及[清单维护](references/tracking.md#来源清单与扩充)。
 - 系统发现公司内研究组与工程项目：读[逐公司团队清单](_shared/references/team-inventory.md)，按本轮公司／行业范围查团队目录、代码组织、模型页和论文机构，记录覆盖与缺口。
 - 补充或追踪技术公众号：读[公众号固定清单](references/wechat-sources.md)；需要发现文章或读取正文时，按[公众号采集路径](references/collection.md#公众号发现与正文读取)核对名称与别名，结合搜狗、官方目录和真实互链定位原文，再用已有会话导出脚本读取。账号归属、原文与官方替代目录分别记录。
@@ -20,7 +20,7 @@ description: 跟踪公司、技术团队和研究 Lab 的工程文章、公众�
 
 完整请求可以组合两条分析流程，共用一次采集结果。优先原始官网、作者论文与代码；[BlogrXiv](https://github.com/OpenEnvision/BlogrXiv) 可用于发现优质来源，返回原站核实后再分析。来源不可达时明确实际覆盖，不以摘要代替精读。
 
-涉及持久化资料时，先按[共用数据目录](_shared/references/storage.md)运行 [存储助手](scripts/storage.py) 的 `resolve`；已知根目录用 `--root` 传入，首次使用或尚未登记时按需 `init`。读取返回的雷达 watchlist 和材料基线，已有目录作为 `catalog.py --previous`，新会话继续使用登记库。独立安装已包含存储助手与必要引用，不要求安装或执行总入口；只解释且没有库时不创建。
+只读取本地资料或解释时，按[共用数据目录](_shared/references/storage.md)用 [存储助手](scripts/storage.py) 的 `resolve` 找回历史；没有库也不创建。采集并保存时的初始化和历史读取统一由上述采集主流程完成。独立安装已包含存储助手与必要引用，不要求安装或执行总入口。
 
 ## 输出要保留的证据
 
