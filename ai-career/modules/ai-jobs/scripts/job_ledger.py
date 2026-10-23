@@ -18,6 +18,10 @@ COMPARE_FIELDS = (
 )
 DATE_PATTERN = re.compile(r"\d{4}-\d{2}-\d{2}\Z")
 DATETIME_PATTERN = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?(?:Z|[+-]\d{2}:\d{2})\Z")
+STRENGTH_KINDS = {
+    "required": "must", "preferred": "preferred",
+    "soft": "unspecified", "unclear": "unspecified",
+}
 
 
 class LedgerError(ValueError):
@@ -72,6 +76,42 @@ def require_strings(value, field):
         require_text(entry, field)
 
 
+def strength_kind(requirement, raw_text, prefix):
+    """核对已提取的强度依据；原文匹配不代替对作用范围和语义的判断。"""
+    basis = requirement["strength_basis"]
+    if not isinstance(basis, dict) or not isinstance(basis.get("level"), str) or basis["level"] not in STRENGTH_KINDS:
+        raise LedgerError(f"{prefix}.strength_basis.level 必须为 required/preferred/soft/unclear")
+    for field in ("quote", "source_ref"):
+        require_text(basis.get(field), f"{prefix}.strength_basis.{field}")
+    require_text(raw_text, "raw_text")
+    if basis["quote"] not in raw_text:
+        raise LedgerError(f"{prefix}.strength_basis.quote 不在 raw_text 中")
+    return STRENGTH_KINDS[basis["level"]]
+
+
+def prepare_record(record):
+    """新采集先以来源强度生成 kind，再使用既有观察格式校验和入库。"""
+    if not isinstance(record, dict) or not isinstance(record.get("requirements"), list):
+        raise LedgerError("观察必须是含 requirements 数组的对象")
+    requirements = []
+    for index, requirement in enumerate(record["requirements"]):
+        prefix = f"requirements[{index}]"
+        if not isinstance(requirement, dict):
+            raise LedgerError(f"{prefix} 必须是对象")
+        kind = requirement.get("kind")
+        if "strength_basis" in requirement:
+            derived = strength_kind(requirement, record.get("raw_text"), prefix)
+            if kind is not None and kind != derived:
+                raise LedgerError(f"{prefix}.kind 与 strength_basis 不一致：应为 {derived}")
+            kind = derived
+        elif kind in ("must", "preferred"):
+            raise LedgerError(f"{prefix} 的强分类缺少 strength_basis；先核对来源强度")
+        elif kind is None:
+            kind = "unspecified"
+        requirements.append({**requirement, "kind": kind})
+    return {**record, "requirements": requirements}
+
+
 def validate(record):
     if not isinstance(record, dict):
         raise LedgerError("每行必须是 JSON 对象")
@@ -106,6 +146,10 @@ def validate(record):
         if requirement.get("kind") not in ("must", "preferred", "responsibility", "unspecified"):
             raise LedgerError(f"{prefix}.kind 必须为 must/preferred/responsibility/unspecified")
         require_strings(requirement.get("skill_tags"), f"{prefix}.skill_tags")
+        if "strength_basis" in requirement:
+            derived = strength_kind(requirement, record.get("raw_text"), prefix)
+            if requirement["kind"] != derived:
+                raise LedgerError(f"{prefix}.kind 与 strength_basis 不一致：应为 {derived}")
     if "locations" in record:
         require_strings(record["locations"], "locations")
     if "company_tier" in record and record["company_tier"] not in ("large", "mid", "small", "unknown"):
@@ -117,19 +161,45 @@ def reject_constant(value):
     raise LedgerError(f"JSON 不允许非有限数字：{value}")
 
 
-def load_input(path):
+def load_input(path, prepare=False):
     records = []
     with Path(path).open(encoding="utf-8") as source:
         for line_number, line in enumerate(source, 1):
             if not line.strip():
                 continue
             try:
-                record = validate(json.loads(line, parse_constant=reject_constant))
+                record = json.loads(line, parse_constant=reject_constant)
+                if prepare:
+                    record = prepare_record(record)
+                record = validate(record)
                 payload = json.dumps(record, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
             except (LedgerError, json.JSONDecodeError, ValueError) as exc:
                 raise LedgerError(f"第 {line_number} 行：{exc}") from exc
             records.append((record["job_key"], record["observed_at"], payload))
     return records
+
+
+def prepare(input_path, output_path):
+    if Path(input_path).resolve() == Path(output_path).resolve():
+        raise LedgerError("prepare 的输出不能覆盖原始草稿")
+    records = load_input(input_path, prepare=True)
+    output = Path(output_path)
+    content = "".join(payload + "\n" for _, _, payload in records)
+    if output.exists() and output.read_text(encoding="utf-8") != content:
+        raise LedgerError(f"准备结果已存在且内容不同：{output}；请使用新的输出路径")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    if not output.exists():
+        output.write_text(content, encoding="utf-8")
+    review = []
+    for job_key, observed_at, payload in records:
+        record = json.loads(payload)
+        review.append({
+            "job_key": job_key, "observed_at": observed_at,
+            "requirements": [{key: value for key, value in requirement.items() if key in (
+                "text", "kind", "source_ref", "section", "qualification_context", "strength_basis",
+            )} for requirement in record["requirements"]],
+        })
+    return {"prepared": len(records), "output": str(output.resolve()), "review": review}
 
 
 def ingest(db, input_path):
@@ -225,6 +295,9 @@ def diff(db, before, after):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    prepare_parser = commands.add_parser("prepare", help="根据来源强度准备新观察 JSONL，不写入账本")
+    prepare_parser.add_argument("--input", required=True)
+    prepare_parser.add_argument("--output", required=True)
     ingest_parser = commands.add_parser("ingest", help="事务导入 JSONL 观察记录")
     ingest_parser.add_argument("--db", required=True)
     ingest_parser.add_argument("--input", required=True)
@@ -237,7 +310,9 @@ def main(argv=None):
     diff_parser.add_argument("--after", required=True)
     args = parser.parse_args(argv)
     try:
-        if args.command == "ingest":
+        if args.command == "prepare":
+            result = prepare(args.input, args.output)
+        elif args.command == "ingest":
             result = ingest(args.db, args.input)
         elif args.command == "list":
             result = latest(args.db, args.as_of)

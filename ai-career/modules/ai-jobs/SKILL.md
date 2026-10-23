@@ -11,7 +11,7 @@ description: 搜索、核实和追踪 AI 实习、校招、社招岗位，维护
 
 | 本轮目标 | 流程 |
 |---|---|
-| 读取 JD、附件或岗位链接；搜索实习、校招、社招 | [岗位采集](references/discovery.md) |
+| 读取 JD、附件或岗位链接；搜索实习、校招、社招 | [岗位采集](references/discovery.md)，按原文强度生成草稿，经 `job_ledger.py prepare` 整理并复核后入库 |
 | 建立固定公司 list、增加公司或渠道、暂停来源 | [官方入口清单](references/source-list.md)与[清单维护](references/tracking.md#来源清单与扩充) |
 | 盘点互联网公司、补齐集团与业务线招聘入口 | [主要互联网平台扩展清单](references/large-internet-sources.md)，逐公司核对实习／校招／社招缺口 |
 | 补充 AI 创业公司、中小厂与专项技术企业来源 | [创业与专项企业分表](references/startup-growth-sources.md)，保留地区和规模证据边界 |

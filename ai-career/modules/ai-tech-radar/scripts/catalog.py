@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""汇总雷达材料观察，按独立工作聚合并保存不可覆盖的目录快照。"""
+"""准备采集前阅读队列，或汇总已读材料并保存不可覆盖的目录快照。"""
 
 import argparse
 from datetime import datetime, timezone
+from html.parser import HTMLParser
 import json
 from pathlib import Path
 import sys
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urljoin, urlsplit, urlunsplit
 
 
 METADATA_FIELDS = (
@@ -187,6 +188,156 @@ def build_catalog(input_paths, previous_path=None):
     }
 
 
+def prepare_candidates(input_path, previous_path=None, limit=None):
+    """用目录元数据和旧目录决定先读什么；不请求正文、不新增观察。"""
+    if limit is not None and limit < 0:
+        raise CatalogError("limit 必须为非负整数")
+    source = json.loads(Path(input_path).read_text(encoding="utf-8"))
+    if not isinstance(source, dict) or not isinstance(source.get("candidates"), list):
+        raise CatalogError("候选文件必须包含 candidates 数组")
+    # 沿用已有目录校验和身份契约，不把 related_urls 当成同材料的别名。
+    previous = build_catalog([], previous_path)["materials"] if previous_path else []
+    by_id = {record["material_id"]: record for record in previous}
+    by_url = {canonical_url(record["url"]): record for record in previous}
+    candidates, unresolved, duplicates, seen = [], [], [], {}
+    for raw in source["candidates"]:
+        if not isinstance(raw, dict):
+            raise CatalogError("候选必须为 JSON 对象")
+        entry = dict(raw)
+        for field in ("title", "date_basis", "source_ref"):
+            require_text(entry.get(field), field)
+        if "url" not in entry:
+            raise CatalogError("候选缺少 url；尚未解析详情链接时使用 null")
+        if entry["url"] is not None:
+            entry["url"] = canonical_url(entry["url"])
+        if "published_at" not in entry:
+            raise CatalogError("候选缺少 published_at；未知日期使用 null")
+        published = entry["published_at"]
+        date_key = ""
+        if published is not None:
+            require_text(published, "published_at")
+            try:
+                date = datetime.fromisoformat(published.replace("Z", "+00:00"))
+            except ValueError as exc:
+                raise CatalogError("候选 published_at 必须为 ISO8601 日期或时间，未知使用 null") from exc
+            date_key = date.replace(tzinfo=date.tzinfo or timezone.utc).astimezone(timezone.utc).isoformat()
+        for field in ("material_id", "work_id", "recheck_reason"):
+            if entry.get(field) is not None:
+                require_text(entry[field], field)
+        if entry["url"] is None:
+            entry["history_match"] = None
+            entry["decision"] = "unresolved_url"
+            unresolved.append(entry)
+            continue
+        matched_id = by_id.get(entry.get("material_id"))
+        matched_url = by_url.get(entry["url"])
+        if matched_id and canonical_url(matched_id["url"]) != entry["url"]:
+            raise CatalogError("候选 material_id 的规范 URL 与历史材料冲突")
+        if matched_id and matched_url and matched_id["material_id"] != matched_url["material_id"]:
+            raise CatalogError("候选 material_id 与 URL 指向不同历史材料")
+        history = matched_id or matched_url
+        if history:
+            for field in ("material_id", "work_id"):
+                if entry.get(field) is not None and entry[field] != history[field]:
+                    raise CatalogError(f"候选 {field} 与历史材料冲突")
+                entry[field] = history[field]
+        entry["history_match"] = history
+        identity = ("material", history["material_id"]) if history else ("url", entry["url"])
+        if identity in seen:
+            first = seen[identity]
+            if any(entry.get(field) != first.get(field) for field in ("published_at", "recheck_reason")):
+                raise CatalogError("重复候选的依据不一致，请先归并同材料的日期/复查依据")
+            entry["duplicate_of"] = first["url"]
+            duplicates.append(entry)
+            continue
+        seen[identity] = entry
+        candidates.append((date_key, entry))
+    # Python 排序稳定：同日沿用发现顺序，未知日期排在已知日期之后。
+    ordered = [entry for _, entry in sorted(candidates, key=lambda item: item[0], reverse=True)]
+    read_queue, reuse, deferred, date_unknown = [], [], [], []
+    for entry in ordered:
+        if entry["published_at"] is None:
+            date_unknown.append(entry)
+        if entry["history_match"] is not None and not entry.get("recheck_reason"):
+            entry["decision"] = "reuse"
+            reuse.append(entry)
+        elif limit is not None and len(read_queue) >= limit:
+            entry["decision"] = "budget_unread"
+            deferred.append(entry)
+        else:
+            entry["decision"] = "recheck" if entry["history_match"] is not None else "read"
+            read_queue.append(entry)
+    return {
+        "candidate_input": str(Path(input_path).resolve()),
+        "previous_baseline": str(Path(previous_path).resolve()) if previous_path else None,
+        "limit": limit,
+        "read_queue": read_queue,
+        "reuse": reuse,
+        "date_unknown": date_unknown,
+        "deferred": deferred,
+        "duplicates": duplicates,
+        "unresolved": unresolved,
+        "counts": {"candidates": len(ordered) + len(unresolved), "read_queue": len(read_queue), "reuse": len(reuse),
+                   "date_unknown": len(date_unknown), "deferred": len(deferred), "duplicates": len(duplicates),
+                   "unresolved": len(unresolved)},
+    }
+
+
+class DirectoryLinks(HTMLParser):
+    """只解析已保存 HTML 的链接文本与 href，不请求链接目标。"""
+
+    def __init__(self, source_url, source_ref):
+        super().__init__()
+        self.source_url = source_url
+        self.base_url = source_url
+        self.base_seen = False
+        self.source_ref = source_ref
+        self.current = None
+        self.links = []
+        self.seen = set()
+
+    def handle_starttag(self, tag, attrs):
+        values = dict(attrs)
+        if tag == "base" and values.get("href") and not self.base_seen:
+            self.base_url = canonical_url(urljoin(self.source_url, values["href"].strip()))
+            self.base_seen = True
+        if tag != "a":
+            return
+        href = values.get("href")
+        self.current = None
+        if not href or not href.strip() or href.strip().startswith("#"):
+            return
+        url = urljoin(self.base_url, href.strip())
+        if urlsplit(url).scheme not in ("http", "https"):
+            return
+        self.current = {"url": canonical_url(url), "text": [], "line": self.getpos()[0]}
+
+    def handle_data(self, data):
+        if self.current is not None:
+            self.current["text"].append(data)
+
+    def handle_endtag(self, tag):
+        if tag != "a" or self.current is None:
+            return
+        current, self.current = self.current, None
+        title = " ".join("".join(current["text"]).split())
+        key = (current["url"], title)
+        if title and key not in self.seen:
+            self.seen.add(key)
+            self.links.append({"title": title, "url": current["url"],
+                               "source_ref": self.source_ref, "locator": f"HTML line {current['line']}"})
+
+
+def extract_directory_links(input_path, base_url):
+    source_url = canonical_url(base_url)
+    source_ref = str(Path(input_path).resolve())
+    parser = DirectoryLinks(source_url, source_ref)
+    parser.feed(Path(input_path).read_text(encoding="utf-8"))
+    parser.close()
+    return {"source_url": source_url, "source_ref": source_ref, "links": parser.links,
+            "counts": {"links": len(parser.links)}}
+
+
 def write_catalog(snapshot, output_path):
     output = Path(output_path)
     content = json.dumps(snapshot, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
@@ -201,17 +352,42 @@ def write_catalog(snapshot, output_path):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", nargs="+", required=True, type=Path)
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--input", nargs="+", type=Path, help="已读材料 JSONL")
+    inputs.add_argument("--candidates", type=Path, help="采集前候选 JSON；不读取正文")
+    inputs.add_argument("--links", type=Path, help="从已保存的目录 HTML 提取实际 href；不联网")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--previous", type=Path)
+    parser.add_argument("--limit", type=int, help="候选模式本轮最多读取的材料数；复用不占名额")
+    parser.add_argument("--base-url", help="--links 所读目录的实际 URL，用于解析相对 href")
     args = parser.parse_args(argv)
+    if args.limit is not None and args.candidates is None:
+        parser.error("--limit 仅用于 --candidates")
+    if bool(args.links) != bool(args.base_url):
+        parser.error("--links 与 --base-url 必须一起使用")
+    if args.links is not None and args.previous is not None:
+        parser.error("--links 只解析目录链接，历史匹配使用 --candidates --previous")
     try:
-        snapshot = build_catalog(args.input, args.previous)
+        if args.links is not None:
+            snapshot = extract_directory_links(args.links, args.base_url)
+        elif args.candidates is not None:
+            snapshot = prepare_candidates(args.candidates, args.previous, args.limit)
+        else:
+            snapshot = build_catalog(args.input, args.previous)
         write_catalog(snapshot, args.output)
     except (CatalogError, OSError, ValueError) as exc:
         print(f"错误：{exc}", file=sys.stderr)
         return 1
-    print(json.dumps(snapshot["counts"], ensure_ascii=False))
+    result = snapshot["counts"]
+    if args.candidates is not None:
+        result = {"output": str(args.output.resolve()), "counts": snapshot["counts"],
+                  "read_queue": [entry["url"] for entry in snapshot["read_queue"]],
+                  "reuse": [entry["material_id"] for entry in snapshot["reuse"]],
+                  "date_unknown": [entry["url"] for entry in snapshot["date_unknown"]],
+                  "unresolved": [entry["title"] for entry in snapshot["unresolved"]]}
+    elif args.links is not None:
+        result = {"output": str(args.output.resolve()), **snapshot}
+    print(json.dumps(result, ensure_ascii=False))
     return 0
 
 
